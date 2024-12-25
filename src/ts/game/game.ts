@@ -1,7 +1,8 @@
 import { Body, Vec2, World } from 'planck';
 import { DISPLAY_TO_M, TIME_STEP } from './constants';
-import { makeCircle } from './object/circle';
-import { makePlanet } from './object/planet';
+import { Fruit } from './object/fruit';
+import { PhysObject } from './object/phys-object';
+import { Planet } from './object/planet';
 
 export class Game {
 
@@ -17,13 +18,13 @@ export class Game {
         });
 
         // Create planet
-        const planet = makePlanet(this.world);
-        this.container.appendChild(planet.getUserData() as HTMLElement);
+        const planet = new Planet(this.world);
+        this.container.appendChild(planet.elem);
 
         // Create circles
         for (let i = 0; i < 5; i++) {
-            const circle = makeCircle(this.world);
-            this.container.appendChild(circle.getUserData() as HTMLElement);
+            const circle = new Fruit(this.world);
+            this.container.appendChild(circle.elem);
         }
 
         // Update all the positions
@@ -31,8 +32,8 @@ export class Game {
 
         document.addEventListener('keydown', (event) => {
             if (event.code === 'Space') {
-                const circle = makeCircle(this.world);
-                this.container.appendChild(circle.getUserData() as HTMLElement);
+                const circle = new Fruit(this.world);
+                this.container.appendChild(circle.elem);
             }
         });
     }
@@ -72,16 +73,16 @@ export class Game {
     }
 
     updateDomPosition(body: Body) {
-        const elem = body.getUserData() as HTMLElement;
-        if (elem == undefined || !(elem instanceof HTMLElement)) {
+        const obj = body.getUserData() as PhysObject;
+        if (obj == undefined) {
             return;
         }
 
         const pos = body.getPosition();
         const xDisp = pos.x / DISPLAY_TO_M;
         const yDisp = pos.y / DISPLAY_TO_M;
-        elem.style.left = `${xDisp - elem.offsetWidth / 2}px`;
-        elem.style.top = `${yDisp - elem.offsetHeight / 2}px`;
+        obj.elem.style.left = `${xDisp - obj.elem.offsetWidth / 2}px`;
+        obj.elem.style.top = `${yDisp - obj.elem.offsetHeight / 2}px`;
     }
 
     update(dt: number) {
