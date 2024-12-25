@@ -1,0 +1,62 @@
+{
+  "name": "suika",
+  "version": "0.0.1",
+  "description": "Suika",
+  "main": "webpack.config.js",
+  "scripts": {
+    "watch": "npm-watch",
+    "reload": "reload -b -d build/client",
+    "static": "mkdir -p build/client/ && rsync -a --delete --exclude js/ --exclude css/ src/static/ build/client/",
+    "sass": "mkdir -p build/client/css && sass src/scss/styles.scss build/client/css/styles.css",
+    "webpack": "webpack",
+    "build": "npm-run-all --parallel webpack sass static",
+    "clean": "rm -rf build/*"
+  },
+  "watch": {
+    "static": {
+      "patterns": [
+        "src/static/**"
+      ],
+      "extensions": "html,css,png,gif,mp3,ttf,svg"
+    },
+    "sass": {
+      "patterns": [
+        "src/scss/**"
+      ],
+      "extensions": "scss"
+    },
+    "webpack": {
+      "patterns": [
+        "src/ts/**",
+        "level/**"
+      ],
+      "extensions": "js,jsx,ts,tsx,json"
+    }
+  },
+  "author": "Jezzamon",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.20.7",
+    "@babel/core": "^7.20.12",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-transform-runtime": "^7.19.6",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-typescript": "^7.18.6",
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/pngjs": "^6.0.5",
+    "babel-loader": "^9.1.2",
+    "canvas": "^2.11.2",
+    "commander": "^12.1.0",
+    "npm-run-all": "^4.1.5",
+    "npm-watch": "^0.11.0",
+    "pngjs": "^7.0.0",
+    "reload": "^3.2.1",
+    "sass": "^1.57.1",
+    "uuid": "^11.0.2",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  },
+  "dependencies": {
+    "jsfxr": "github:Jezzamonn/jsfxr"
+  }
+}

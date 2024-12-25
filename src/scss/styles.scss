@@ -1,0 +1,38 @@
+html, body {
+    margin: 0;
+    overflow: hidden;
+
+    background-color: white;
+    color: black;
+}
+
+body {
+    --scale: 1;
+    --pageHeight: 100vh;
+    --pageWidth: 100vw;
+}
+
+p {
+    margin: 0;
+}
+
+.content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: var(--pageHeight);
+    width: var(--pageWidth);
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.invisible {
+    visibility: hidden;
+}
