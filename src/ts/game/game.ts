@@ -1,6 +1,7 @@
-import { Body, Circle, Vec2, World } from 'planck';
-import { lerp } from '../lib/util';
-import { DISPLAY_TO_M, rng, TIME_STEP } from './constants';
+import { Body, Vec2, World } from 'planck';
+import { DISPLAY_TO_M, TIME_STEP } from './constants';
+import { makeCircle } from './object/circle';
+import { makePlanet } from './object/planet';
 
 export class Game {
 
@@ -16,64 +17,24 @@ export class Game {
         });
 
         // Create planet
-        const planetRadiusDisp = 100;
-
-        const planet = this.world.createBody({
-            type: 'static',
-            position: new Vec2(0.0, 0.0),
-        });
-
-        planet.createFixture({
-            shape: new Circle(planetRadiusDisp * DISPLAY_TO_M),
-            density: 0.0,
-        });
-
-        const planetElem = document.createElement('div');
-        planetElem.className = 'planet world-object';
-        planetElem.style.width = `${planetRadiusDisp * 2}px`;
-        planetElem.style.height = `${planetRadiusDisp * 2}px`;
-        planetElem.style.backgroundColor = 'rgb(28, 28, 64)';
-        this.container.appendChild(planetElem);
-        planet.setUserData(planetElem);
+        const planet = makePlanet(this.world);
+        this.container.appendChild(planet.getUserData() as HTMLElement);
 
         // Create circles
         for (let i = 0; i < 5; i++) {
-            const positionRadiusDisp = planetRadiusDisp + lerp(200, 300, rng());
-            const angle = lerp(0, 2 * Math.PI, rng());
-            const x = positionRadiusDisp * Math.cos(angle) * DISPLAY_TO_M;
-            const y = positionRadiusDisp * Math.sin(angle) * DISPLAY_TO_M;
-
-            const circle = this.world.createBody({
-                type: 'dynamic',
-                position: new Vec2(x * DISPLAY_TO_M, y * DISPLAY_TO_M),
-            });
-
-            const radiusDisp = 20;
-            circle.createFixture({
-                shape: new Circle(radiusDisp * DISPLAY_TO_M),
-                density: 1.0,
-            });
-
-            const circleElem = document.createElement('div');
-            circleElem.className = 'circle world-object';
-            circleElem.style.width = `${radiusDisp * 2}px`;
-            circleElem.style.height = `${radiusDisp * 2}px`;
-
-            // Random color
-            // Min = hsl(277, 36%, 37%)
-            // Max = hsl(31, 68%, 48%)
-            const r = rng();
-            const h = lerp(277, 31, r);
-            const s = lerp(36, 68, r);
-            const l = lerp(37, 48, r);
-
-            circleElem.style.backgroundColor = `hsl(${h}, ${s}%, ${l}%)`;
-            this.container.appendChild(circleElem);
-            circle.setUserData(circleElem);
+            const circle = makeCircle(this.world);
+            this.container.appendChild(circle.getUserData() as HTMLElement);
         }
 
         // Update all the positions
         this.render();
+
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space') {
+                const circle = makeCircle(this.world);
+                this.container.appendChild(circle.getUserData() as HTMLElement);
+            }
+        });
     }
 
     start() {
