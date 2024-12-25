@@ -16,7 +16,7 @@ export class Game {
         });
 
         // Create planet
-        const planetWidthDisp = 200;
+        const planetRadiusDisp = 100;
 
         const planet = this.world.createBody({
             type: 'static',
@@ -24,40 +24,40 @@ export class Game {
         });
 
         planet.createFixture({
-            shape: new Circle(planetWidthDisp * DISPLAY_TO_M),
+            shape: new Circle(planetRadiusDisp * DISPLAY_TO_M),
             density: 0.0,
         });
 
         const planetElem = document.createElement('div');
         planetElem.className = 'planet world-object';
-        planetElem.style.width = `${planetWidthDisp}px`;
-        planetElem.style.height = `${planetWidthDisp}px`;
+        planetElem.style.width = `${planetRadiusDisp * 2}px`;
+        planetElem.style.height = `${planetRadiusDisp * 2}px`;
         planetElem.style.backgroundColor = 'rgb(28, 28, 64)';
         this.container.appendChild(planetElem);
         planet.setUserData(planetElem);
 
         // Create circles
         for (let i = 0; i < 5; i++) {
-            const radiusDisp = planetWidthDisp + lerp(80, 160, rng());
+            const positionRadiusDisp = planetRadiusDisp + lerp(200, 300, rng());
             const angle = lerp(0, 2 * Math.PI, rng());
-            const xDisp = radiusDisp * Math.cos(angle);
-            const yDisp = radiusDisp * Math.sin(angle);
+            const x = positionRadiusDisp * Math.cos(angle) * DISPLAY_TO_M;
+            const y = positionRadiusDisp * Math.sin(angle) * DISPLAY_TO_M;
 
             const circle = this.world.createBody({
                 type: 'dynamic',
-                position: new Vec2(xDisp * DISPLAY_TO_M, yDisp * DISPLAY_TO_M),
+                position: new Vec2(x * DISPLAY_TO_M, y * DISPLAY_TO_M),
             });
 
-            const widthDisp = 40;
+            const radiusDisp = 20;
             circle.createFixture({
-                shape: new Circle(widthDisp * DISPLAY_TO_M),
+                shape: new Circle(radiusDisp * DISPLAY_TO_M),
                 density: 1.0,
             });
 
             const circleElem = document.createElement('div');
             circleElem.className = 'circle world-object';
-            circleElem.style.width = `${widthDisp}px`;
-            circleElem.style.height = `${widthDisp}px`;
+            circleElem.style.width = `${radiusDisp * 2}px`;
+            circleElem.style.height = `${radiusDisp * 2}px`;
 
             // Random color
             // Min = hsl(277, 36%, 37%)
@@ -124,6 +124,15 @@ export class Game {
     }
 
     update(dt: number) {
+        // Add physic forces:
+        for (let body = this.world.getBodyList(); body; body = body.getNext()) {
+            if (body.getType() === 'dynamic') {
+                const pos = body.getPosition();
+                const force = pos.clone().neg().mul(body.getMass() * 10); // Gravity force towards the center
+                body.applyForceToCenter(force);
+            }
+        }
+
         this.world.step(dt);
     }
 
