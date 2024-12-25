@@ -1,14 +1,28 @@
 import { Circle, Vec2, World } from "planck";
-import { lerp } from "../../lib/util";
 import { DISPLAY_TO_M } from "../constants";
 import { PhysObject } from "./phys-object";
 
+const colors = [
+    'rgb(245, 39, 39)',   // cherry
+    'rgb(248, 69, 69)', // strawberry
+    'rgb(142, 69, 133)',  // grapes
+    'rgb(248, 170, 53)',   // dekopon
+    'rgb(255, 123, 0)',   // orange
+    'rgb(233, 19, 19)',     // apple
+    'rgb(209, 226, 49)',  // pear
+    'rgb(247, 186, 185)', // peach
+    'rgb(227, 205, 57)',  // pineapple
+    'rgb(139, 203, 99)',  // cantaloupe
+    'rgb(13, 115, 45)', // watermelon
+]
+
 export class Fruit implements PhysObject {
-    static numFruits = 11;
+    static maxFruitType = 11;
     static maxSpawnType = 5;
 
     body: any;
     elem: HTMLElement;
+    destroyed = false;
 
     constructor(world: World, public fruitType: number = 0) {
         this.body = world.createBody({
@@ -29,7 +43,7 @@ export class Fruit implements PhysObject {
     }
 
     static getRadiusDisp(fruitType: number): number {
-        return 10 + 5 * fruitType;
+        return 10 + 10 * fruitType;
     }
 
     static createElem(fruitType: number): HTMLElement {
@@ -40,15 +54,7 @@ export class Fruit implements PhysObject {
         elem.style.width = `${radiusDisp * 2}px`;
         elem.style.height = `${radiusDisp * 2}px`;
 
-        // Random color
-        // Min = hsl(277, 36%, 37%)
-        // Max = hsl(31, 68%, 48%)
-        const r = fruitType / 4.7;
-        const h = lerp(277, 31, r);
-        const s = lerp(36, 68, r);
-        const l = lerp(37, 48, r);
-
-        elem.style.backgroundColor = `hsl(${h}, ${s}%, ${l}%)`;
+        elem.style.backgroundColor = colors[fruitType];
 
         return elem;
     }

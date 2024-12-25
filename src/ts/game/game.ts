@@ -10,6 +10,8 @@ export class Game {
     private container: HTMLElement;
     private simulatedTimeMs: number | undefined;
 
+    private unresolvedCollisions: PhysObject[][] = [];
+
     constructor() {
         this.container = document.querySelector('.world')!;
 
@@ -36,6 +38,13 @@ export class Game {
 
                 this.container.appendChild(circle.elem);
             }
+        });
+
+        this.world.on('begin-contact', (contact) => {
+            const objA = contact.getFixtureA().getBody().getUserData() as PhysObject;
+            const objB = contact.getFixtureB().getBody().getUserData() as PhysObject;
+
+            this.unresolvedCollisions.push([objA, objB]);
         });
     }
 
@@ -97,6 +106,34 @@ export class Game {
         }
 
         this.world.step(dt);
+
+        // Resolve collisions
+        for (const [objA, objB] of this.unresolvedCollisions) {
+            if (objA instanceof Fruit && objB instanceof Fruit && objA.fruitType === objB.fruitType && !objA.destroyed && !objB.destroyed) {
+                const posA = objA.body.getPosition();
+                const posB = objB.body.getPosition();
+                const midPoint = posA.clone().add(posB).mul(0.5);
+
+                // Destroy the old fruits
+                this.world.destroyBody(objA.body);
+                this.world.destroyBody(objB.body);
+                this.container.removeChild(objA.elem);
+                this.container.removeChild(objB.elem);
+                objA.destroyed = true;
+                objB.destroyed = true
+
+                const newFruitType = objA.fruitType + 1;
+                if (newFruitType >= Fruit.maxFruitType) {
+                    continue;
+                }
+
+                // Create a new fruit at the midpoint
+                const newFruit = new Fruit(this.world, newFruitType);
+                newFruit.body.setPosition(midPoint);
+                this.container.appendChild(newFruit.elem);
+            }
+        }
+        this.unresolvedCollisions = [];
     }
 
 }
