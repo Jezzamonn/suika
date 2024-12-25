@@ -1,5 +1,5 @@
 import { Body, Vec2, World } from 'planck';
-import { DISPLAY_TO_M, TIME_STEP } from './constants';
+import { DISPLAY_TO_M, rng, TIME_STEP } from './constants';
 import { Fruit } from './object/fruit';
 import { PhysObject } from './object/phys-object';
 import { Planet } from './object/planet';
@@ -21,18 +21,19 @@ export class Game {
         const planet = new Planet(this.world);
         this.container.appendChild(planet.elem);
 
-        // Create circles
-        for (let i = 0; i < 5; i++) {
-            const circle = new Fruit(this.world);
-            this.container.appendChild(circle.elem);
-        }
-
         // Update all the positions
         this.render();
 
         document.addEventListener('keydown', (event) => {
             if (event.code === 'Space') {
-                const circle = new Fruit(this.world);
+                const positionRadius = 510 * DISPLAY_TO_M;
+                const positionAngle = rng() * Math.PI * 2;
+                const position = new Vec2(Math.cos(positionAngle), Math.sin(positionAngle)).mul(positionRadius);
+
+                const fruitType = Math.floor(rng() * Fruit.maxSpawnType + 1);
+                const circle = new Fruit(this.world, fruitType);
+                circle.body.setPosition(position);
+
                 this.container.appendChild(circle.elem);
             }
         });
