@@ -57,6 +57,7 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
-    "jsfxr": "github:Jezzamonn/jsfxr"
+    "jsfxr": "github:Jezzamonn/jsfxr",
+    "planck": "^1.2.0"
   }
 }
