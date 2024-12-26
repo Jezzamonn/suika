@@ -43,7 +43,7 @@ export class Fruit implements PhysObject {
     }
 
     static getRadiusDisp(fruitType: number): number {
-        return 2.5 + 5 * fruitType;
+        return 2.5 + 6 * fruitType;
     }
 
     static createElem(fruitType: number): HTMLElement {
