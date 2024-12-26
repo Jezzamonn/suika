@@ -76,6 +76,7 @@ export class Fruit implements PhysObject {
             const posA = fruitA.body.getPosition();
             const posB = fruitB.body.getPosition();
             const midPoint = posA.clone().add(posB).mul(0.5);
+            const averageVelocity = fruitA.body.getLinearVelocity().clone().add(fruitB.body.getLinearVelocity()).mul(0.5);
 
             // Destroy the old fruits
             world.destroyBody(fruitA.body);
@@ -93,6 +94,7 @@ export class Fruit implements PhysObject {
             // Create a new fruit at the midpoint
             const newFruit = new Fruit(world, newFruitType);
             newFruit.body.setPosition(midPoint);
+            newFruit.body.setLinearVelocity(averageVelocity);
             container.appendChild(newFruit.elem);
         }
     }

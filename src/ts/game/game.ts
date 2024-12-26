@@ -66,7 +66,12 @@ export class Game {
         const x = clientX - rect.left;
         const y = clientY - rect.top;
 
-        this.heldFruit.setElemPosition(new Vec2(x, y));
+        const radius = 300;
+        const pos = new Vec2(x, y)
+        const existingDist = pos.length();
+        pos.mul(radius / existingDist);
+
+        this.heldFruit.setElemPosition(pos);
     }
 
     dropFruit() {
