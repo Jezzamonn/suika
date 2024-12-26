@@ -1,6 +1,6 @@
-import { Body, Vec2, World } from 'planck';
-import { DISPLAY_TO_M, rng, TIME_STEP } from './constants';
-import { Fruit } from './object/fruit';
+import { Vec2, World } from 'planck';
+import { TIME_STEP } from './constants';
+import { Fruit, HeldFruit } from './object/fruit';
 import { PhysObject } from './object/phys-object';
 import { Planet } from './object/planet';
 
@@ -11,6 +11,9 @@ export class Game {
     private simulatedTimeMs: number | undefined;
 
     private unresolvedCollisions: PhysObject[][] = [];
+
+    private heldFruit: HeldFruit;
+    private nextFruit: HeldFruit;
 
     constructor() {
         this.container = document.querySelector('.world')!;
@@ -23,21 +26,31 @@ export class Game {
         const planet = new Planet(this.world);
         this.container.appendChild(planet.elem);
 
+        // Create held fruit
+        this.heldFruit = new HeldFruit();
+        // this.nextFruit = new HeldFruit();
+
+        this.container.appendChild(this.heldFruit.elem);
+        // this.container.appendChild(this.nextFruit.elem);
+
         // Update all the positions
         this.render();
 
-        document.addEventListener('keydown', (event) => {
-            if (event.code === 'Space') {
-                const positionRadius = 510 * DISPLAY_TO_M;
-                const positionAngle = rng() * Math.PI * 2;
-                const position = new Vec2(Math.cos(positionAngle), Math.sin(positionAngle)).mul(positionRadius);
+        document.addEventListener('mousedown', (event) => {
+            this.dropFruit();
+        });
 
-                const fruitType = Math.floor(rng() * Fruit.maxSpawnType + 1);
-                const circle = new Fruit(this.world, fruitType);
-                circle.body.setPosition(position);
+        document.addEventListener('touchend', (event) => {
+            this.dropFruit();
+        });
 
-                this.container.appendChild(circle.elem);
-            }
+        document.addEventListener('mousemove', (event) => {
+            this.updateHeldItemPosition(event.clientX, event.clientY);
+        });
+
+        document.addEventListener('touchmove', (event) => {
+            const touch = event.touches[0];
+            this.updateHeldItemPosition(touch.clientX, touch.clientY);
         });
 
         this.world.on('begin-contact', (contact) => {
@@ -46,6 +59,28 @@ export class Game {
 
             this.unresolvedCollisions.push([objA, objB]);
         });
+    }
+
+    updateHeldItemPosition(clientX: number, clientY: number) {
+        const rect = this.container.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+
+        this.heldFruit.setElemPosition(new Vec2(x, y));
+    }
+
+    dropFruit() {
+        const fruit = this.heldFruit.createFruit(this.world);
+
+        this.container.appendChild(fruit.elem);
+
+        this.heldFruit.elem.remove();
+
+        const newFruit = new HeldFruit();
+        newFruit.setElemPosition(this.heldFruit.posDisp);
+
+        this.heldFruit = newFruit;
+        this.container.appendChild(this.heldFruit.elem);
     }
 
     start() {
@@ -78,21 +113,9 @@ export class Game {
 
     render() {
         for (let body = this.world.getBodyList(); body; body = body.getNext()) {
-            this.updateDomPosition(body);
+            const obj = body.getUserData() as PhysObject;
+            obj.updateElemPosition?.();
         }
-    }
-
-    updateDomPosition(body: Body) {
-        const obj = body.getUserData() as PhysObject;
-        if (obj == undefined) {
-            return;
-        }
-
-        const pos = body.getPosition();
-        const xDisp = pos.x / DISPLAY_TO_M;
-        const yDisp = pos.y / DISPLAY_TO_M;
-        obj.elem.style.left = `${xDisp - obj.elem.offsetWidth / 2}px`;
-        obj.elem.style.top = `${yDisp - obj.elem.offsetHeight / 2}px`;
     }
 
     update(dt: number) {
@@ -109,28 +132,8 @@ export class Game {
 
         // Resolve collisions
         for (const [objA, objB] of this.unresolvedCollisions) {
-            if (objA instanceof Fruit && objB instanceof Fruit && objA.fruitType === objB.fruitType && !objA.destroyed && !objB.destroyed) {
-                const posA = objA.body.getPosition();
-                const posB = objB.body.getPosition();
-                const midPoint = posA.clone().add(posB).mul(0.5);
-
-                // Destroy the old fruits
-                this.world.destroyBody(objA.body);
-                this.world.destroyBody(objB.body);
-                this.container.removeChild(objA.elem);
-                this.container.removeChild(objB.elem);
-                objA.destroyed = true;
-                objB.destroyed = true
-
-                const newFruitType = objA.fruitType + 1;
-                if (newFruitType >= Fruit.maxFruitType) {
-                    continue;
-                }
-
-                // Create a new fruit at the midpoint
-                const newFruit = new Fruit(this.world, newFruitType);
-                newFruit.body.setPosition(midPoint);
-                this.container.appendChild(newFruit.elem);
+            if (objA instanceof Fruit && objB instanceof Fruit) {
+                Fruit.merge(objA, objB, this.world, this.container);
             }
         }
         this.unresolvedCollisions = [];

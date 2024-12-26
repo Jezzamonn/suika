@@ -1,5 +1,5 @@
 import { Circle, Vec2, World } from "planck";
-import { DISPLAY_TO_M } from "../constants";
+import { DISPLAY_TO_M, rng } from "../constants";
 import { PhysObject } from "./phys-object";
 
 const colors = [
@@ -43,7 +43,7 @@ export class Fruit implements PhysObject {
     }
 
     static getRadiusDisp(fruitType: number): number {
-        return 10 + 10 * fruitType;
+        return 2.5 + 5 * fruitType;
     }
 
     static createElem(fruitType: number): HTMLElement {
@@ -58,5 +58,70 @@ export class Fruit implements PhysObject {
 
         return elem;
     }
+
+    get radiusDisp() {
+        return Fruit.getRadiusDisp(this.fruitType);
+    }
+
+    updateElemPosition() {
+        const pos = this.body.getPosition();
+        const xDisp = pos.x / DISPLAY_TO_M;
+        const yDisp = pos.y / DISPLAY_TO_M;
+        this.elem.style.left = `${xDisp - this.radiusDisp}px`;
+        this.elem.style.top = `${yDisp - this.radiusDisp}px`;
+    }
+
+    static merge(fruitA: Fruit, fruitB: Fruit, world: World, container: HTMLElement) {
+        if (fruitA.fruitType === fruitB.fruitType && !fruitA.destroyed && !fruitB.destroyed) {
+            const posA = fruitA.body.getPosition();
+            const posB = fruitB.body.getPosition();
+            const midPoint = posA.clone().add(posB).mul(0.5);
+
+            // Destroy the old fruits
+            world.destroyBody(fruitA.body);
+            world.destroyBody(fruitB.body);
+            container.removeChild(fruitA.elem);
+            container.removeChild(fruitB.elem);
+            fruitA.destroyed = true;
+            fruitB.destroyed = true
+
+            const newFruitType = fruitA.fruitType + 1;
+            if (newFruitType >= Fruit.maxFruitType) {
+                return;
+            }
+
+            // Create a new fruit at the midpoint
+            const newFruit = new Fruit(world, newFruitType);
+            newFruit.body.setPosition(midPoint);
+            container.appendChild(newFruit.elem);
+        }
+    }
 }
 
+export class HeldFruit {
+    elem: HTMLElement;
+    fruitType: number;
+    posDisp: Vec2;
+
+    constructor() {
+        this.fruitType = Math.floor(rng() * Fruit.maxSpawnType + 1);
+        this.elem = Fruit.createElem(this.fruitType);
+        this.elem.classList.add('held-fruit');
+    }
+
+    get radiusDisp() {
+        return Fruit.getRadiusDisp(this.fruitType);
+    }
+
+    createFruit(world: World): Fruit {
+        const fruit = new Fruit(world, this.fruitType);
+        fruit.body.setPosition(this.posDisp.clone().mul(DISPLAY_TO_M));
+        return fruit;
+    }
+
+    setElemPosition(posDisp: Vec2) {
+        this.posDisp = posDisp;
+        this.elem.style.left = `${posDisp.x - this.radiusDisp}px`;
+        this.elem.style.top = `${posDisp.y - this.radiusDisp}px`;
+    }
+}

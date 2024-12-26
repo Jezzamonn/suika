@@ -2,10 +2,9 @@ import { Circle, Vec2, World } from "planck";
 import { DISPLAY_TO_M } from "../constants";
 import { PhysObject } from "./phys-object";
 
-export const planetRadiusDisp = 100;
+export const planetRadiusDisp = 20;
 
 export class Planet implements PhysObject {
-
     body: any;
     elem: HTMLElement;
 
