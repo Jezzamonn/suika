@@ -1,5 +1,6 @@
 import { Vec2, World } from 'planck';
 import { TIME_STEP } from './constants';
+import { makeDividers } from './object/divider';
 import { Fruit, HeldFruit } from './object/fruit';
 import { PhysObject } from './object/phys-object';
 import { Planet } from './object/planet';
@@ -38,6 +39,11 @@ export class Game {
             this.container.appendChild(heldFruit.elem);
         }
 
+        // Create dividers too
+        for (const divider of makeDividers(numPlayers)) {
+            this.container.appendChild(divider);
+        }
+
         // Update all the positions
         this.render();
 
@@ -60,9 +66,7 @@ export class Game {
         });
 
         document.addEventListener('touchstart', (event) => {
-            for (let t = 0; t < event.changedTouches.length; t++) {
-                const touch = event.changedTouches[t];
-
+            for (const touch of event.changedTouches) {
                 for (let i = 0; i < this.heldFruit.length; i++) {
                     if (this.isInHeldItemRange(i, touch.clientX, touch.clientY)) {
                         this.fruitIndexToTouchId.set(i, touch.identifier);
@@ -82,13 +86,7 @@ export class Game {
                     continue;
                 }
 
-                let touch: Touch | undefined;
-                for (let t = 0; t < event.changedTouches.length; t++) {
-                    if (event.changedTouches[t].identifier === touchId) {
-                        touch = event.changedTouches[t];
-                        break;
-                    }
-                }
+                let touch = [...event.changedTouches].find(t => t.identifier === touchId);
 
                 if (touch == undefined) {
                     continue;
@@ -106,13 +104,7 @@ export class Game {
                     continue;
                 }
 
-                let touch: Touch | undefined;
-                for (let t = 0; t < event.changedTouches.length; t++) {
-                    if (event.changedTouches[t].identifier === touchId) {
-                        touch = event.changedTouches[t];
-                        break;
-                    }
-                }
+                let touch = [...event.changedTouches].find(t => t.identifier === touchId);
 
                 if (touch == undefined) {
                     continue;

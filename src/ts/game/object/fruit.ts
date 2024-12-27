@@ -1,6 +1,7 @@
 import { Circle, Vec2, World } from "planck";
 import { clamp } from "../../lib/util";
 import { DISPLAY_TO_M, rng } from "../constants";
+import * as divider from './divider';
 import { PhysObject } from "./phys-object";
 
 const colors = [
@@ -101,7 +102,7 @@ export class Fruit implements PhysObject {
     }
 }
 
-const holdRadiusDisp = 50;
+export const holdRadiusDisp = 50;
 
 export class HeldFruit {
     elem: HTMLElement;
@@ -110,6 +111,7 @@ export class HeldFruit {
     dropped = false;
 
     halfAngleDeltaAfterPadding: number;
+    halfAngleDeltaAfterDivider: number;
 
     constructor(public middleAngle: number, public halfAngleDelta: number) {
         this.fruitType = Math.floor(rng() * Fruit.maxSpawnType + 1);
@@ -121,9 +123,11 @@ export class HeldFruit {
             Math.sin(this.middleAngle) * holdRadiusDisp,
         );
 
+        this.halfAngleDeltaAfterDivider = this.halfAngleDelta - divider.halfArcSize;
+
         const radiusDisp = Fruit.getRadiusDisp(this.fruitType);
         const radiusAngle = radiusDisp / holdRadiusDisp;
-        this.halfAngleDeltaAfterPadding = this.halfAngleDelta - radiusAngle;
+        this.halfAngleDeltaAfterPadding = this.halfAngleDeltaAfterDivider - radiusAngle;
 
         this.updateElemPosition();
     }
@@ -138,7 +142,7 @@ export class HeldFruit {
             angleDiff -= 2 * Math.PI;
         }
 
-        return Math.abs(angleDiff) < this.halfAngleDelta;
+        return Math.abs(angleDiff) < this.halfAngleDeltaAfterDivider;
     }
 
     get radiusDisp() {
