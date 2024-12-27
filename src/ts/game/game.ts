@@ -80,7 +80,7 @@ export class Game {
 
             }
             event.preventDefault();
-        });
+        }, { passive: false });
 
         document.addEventListener('touchmove', (event) => {
             for (let i = 0; i < this.heldFruit.length; i++) {
@@ -89,7 +89,7 @@ export class Game {
                     continue;
                 }
 
-                let touch = [...event.changedTouches].find(t => t.identifier === touchId);
+                let touch = [...event.touches].find(t => t.identifier === touchId);
 
                 if (touch == undefined) {
                     continue;
@@ -98,7 +98,7 @@ export class Game {
                 this.updateHeldItemPosition(i, touch.clientX, touch.clientY);
             }
             event.preventDefault();
-        });
+        }, { passive: false });
 
         document.addEventListener('touchend', (event) => {
             for (let i = 0; i < this.heldFruit.length; i++) {
@@ -120,7 +120,7 @@ export class Game {
             }
 
             event.preventDefault();
-        });
+        }, { passive: false });
 
         document.addEventListener('keydown', (event) => {
             if (event.code === 'Space') {
