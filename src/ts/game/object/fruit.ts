@@ -25,6 +25,9 @@ export class Fruit implements PhysObject {
     body: any;
     elem: HTMLElement;
     destroyed = false;
+    hasTouchedGround = false;
+
+    isOutsideBoundsCount = 0;
 
     constructor(world: World, public fruitType: number = 0) {
         this.body = world.createBody({
@@ -72,6 +75,20 @@ export class Fruit implements PhysObject {
         const yDisp = pos.y / DISPLAY_TO_M;
         this.elem.style.left = `${xDisp - this.radiusDisp + 50}cqmin`;
         this.elem.style.top = `${yDisp - this.radiusDisp + 50}cqmin`;
+    }
+
+    isOutsideBounds() {
+        const pos = this.body.getPosition();
+        const posLen = pos.length();
+        return posLen > (50 * 0.9) * DISPLAY_TO_M;
+    }
+
+    updateIsOutsideBoundsCount(dt: number) {
+        if (this.hasTouchedGround && this.isOutsideBounds()) {
+            this.isOutsideBoundsCount += dt;
+        } else {
+            this.isOutsideBoundsCount = 0;
+        }
     }
 
     static merge(fruitA: Fruit, fruitB: Fruit, world: World, container: HTMLElement) {

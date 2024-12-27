@@ -3,4 +3,6 @@ export interface PhysObject {
     elem: HTMLElement;
 
     updateElemPosition?: () => void;
+
+    hasTouchedGround: boolean;
 }

@@ -5,6 +5,8 @@ import { Fruit, HeldFruit } from './object/fruit';
 import { PhysObject } from './object/phys-object';
 import { Planet } from './object/planet';
 
+const maxOutsideBoundsTime = 0.5;
+
 export class Game {
 
     private world: World;
@@ -16,6 +18,7 @@ export class Game {
     private heldFruit: HeldFruit[] = [];
 
     private fruitIndexToTouchId: Map<number, number> = new Map();
+    private gameOver = false;
 
     constructor(numPlayers: number) {
         this.container = document.querySelector('.world')!;
@@ -119,6 +122,14 @@ export class Game {
             event.preventDefault();
         });
 
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space') {
+                for (let i = 0; i < this.heldFruit.length; i++) {
+                    this.dropFruit(i);
+                }
+            }
+        });
+
         this.world.on('begin-contact', (contact) => {
             const objA = contact.getFixtureA().getBody().getUserData() as PhysObject;
             const objB = contact.getFixtureB().getBody().getUserData() as PhysObject;
@@ -194,6 +205,10 @@ export class Game {
     }
 
     update(dt: number) {
+        if (this.gameOver) {
+            return;
+        }
+
         // Add physic forces:
         for (let body = this.world.getBodyList(); body; body = body.getNext()) {
             if (body.getType() === 'dynamic') {
@@ -207,11 +222,26 @@ export class Game {
 
         // Resolve collisions
         for (const [objA, objB] of this.unresolvedCollisions) {
+            if ('hasTouchedGround' in objA && 'hasTouchedGround' in objB) {
+                objA.hasTouchedGround = objA.hasTouchedGround || objB.hasTouchedGround;
+                objB.hasTouchedGround = objA.hasTouchedGround || objB.hasTouchedGround;;
+            }
+
             if (objA instanceof Fruit && objB instanceof Fruit) {
                 Fruit.merge(objA, objB, this.world, this.container);
             }
-        }
+         }
         this.unresolvedCollisions = [];
+
+        for (let body = this.world.getBodyList(); body; body = body.getNext()) {
+            if (body.getUserData() instanceof Fruit) {
+                const fruit = body.getUserData() as Fruit;
+                fruit.updateIsOutsideBoundsCount(dt);
+                if (fruit.isOutsideBoundsCount > maxOutsideBoundsTime) {
+                    this.gameOver = true;
+                }
+            }
+        }
     }
 
 }

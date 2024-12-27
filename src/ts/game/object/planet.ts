@@ -7,6 +7,7 @@ export const planetRadiusDisp = 50 / 5;
 export class Planet implements PhysObject {
     body: any;
     elem: HTMLElement;
+    hasTouchedGround = true;
 
     constructor(world: World) {
         this.body = world.createBody({
