@@ -101,7 +101,7 @@ export class Fruit implements PhysObject {
     }
 }
 
-const holdRadius = 50;
+const holdRadiusDisp = 50;
 
 export class HeldFruit {
     elem: HTMLElement;
@@ -109,15 +109,21 @@ export class HeldFruit {
     posDisp: Vec2;
     dropped = false;
 
+    halfAngleDeltaAfterPadding: number;
+
     constructor(public middleAngle: number, public halfAngleDelta: number) {
         this.fruitType = Math.floor(rng() * Fruit.maxSpawnType + 1);
         this.elem = Fruit.createElem(this.fruitType);
         this.elem.classList.add('held-fruit');
 
         this.posDisp = new Vec2(
-            Math.cos(this.middleAngle) * holdRadius,
-            Math.sin(this.middleAngle) * holdRadius,
+            Math.cos(this.middleAngle) * holdRadiusDisp,
+            Math.sin(this.middleAngle) * holdRadiusDisp,
         );
+
+        const radiusDisp = Fruit.getRadiusDisp(this.fruitType);
+        const radiusAngle = radiusDisp / holdRadiusDisp;
+        this.halfAngleDeltaAfterPadding = this.halfAngleDelta - radiusAngle;
 
         this.updateElemPosition();
     }
@@ -159,12 +165,12 @@ export class HeldFruit {
         }
 
         // Now clamp to the angle range
-        angleDiff = clamp(angleDiff, -this.halfAngleDelta, this.halfAngleDelta);
+        angleDiff = clamp(angleDiff, -this.halfAngleDeltaAfterPadding, this.halfAngleDeltaAfterPadding);
         angle = this.middleAngle + angleDiff;
 
         this.posDisp = new Vec2(
-            Math.cos(angle) * holdRadius,
-            Math.sin(angle) * holdRadius,
+            Math.cos(angle) * holdRadiusDisp,
+            Math.sin(angle) * holdRadiusDisp,
         );
 
         this.updateElemPosition();
