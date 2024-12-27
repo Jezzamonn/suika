@@ -30,7 +30,7 @@ export class Game {
         // Create held fruit
         for (let i = 0; i < numPlayers; i++) {
             const iAmt = i / numPlayers;
-            const angle = iAmt * 2 * Math.PI;
+            const angle = iAmt * 2 * Math.PI + 0.5 * Math.PI;
             const angleDelta = (1 / numPlayers) * 2 * Math.PI;
 
             const heldFruit = new HeldFruit(angle, angleDelta / 2);

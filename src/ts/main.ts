@@ -1,5 +1,7 @@
 import { Game } from "./game/game";
 
-const game = new Game(3);
+const urlParams = new URLSearchParams(window.location.search);
+const numFruits = parseInt(urlParams.get('numFruits') || '2');
+const game = new Game(numFruits);
 
 game.start();
