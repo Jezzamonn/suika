@@ -1,5 +1,5 @@
 import { Circle, Vec2, World } from "planck";
-import { clamp } from "../../lib/util";
+import { clamp, experp } from "../../lib/util";
 import { DISPLAY_TO_M, rng } from "../constants";
 import * as divider from './divider';
 import { PhysObject } from "./phys-object";
@@ -19,7 +19,7 @@ const colors = [
 ]
 
 export class Fruit implements PhysObject {
-    static maxFruitType = 11;
+    static maxFruitType = 10;
     static maxSpawnType = 5;
 
     body: any;
@@ -45,7 +45,8 @@ export class Fruit implements PhysObject {
     }
 
     static getRadiusDisp(fruitType: number): number {
-        return 0.3 + 0.7 * fruitType;
+        const amt = fruitType / Fruit.maxFruitType;
+        return experp(0.8, 10, amt);
     }
 
     static createElem(fruitType: number): HTMLElement {
@@ -89,7 +90,7 @@ export class Fruit implements PhysObject {
             fruitB.destroyed = true
 
             const newFruitType = fruitA.fruitType + 1;
-            if (newFruitType >= Fruit.maxFruitType) {
+            if (newFruitType > Fruit.maxFruitType) {
                 return;
             }
 
