@@ -14,6 +14,8 @@ export class Game {
 
     private heldFruit: HeldFruit[] = [];
 
+    private fruitIndexToTouchId: Map<number, number> = new Map();
+
     constructor(numPlayers: number) {
         this.container = document.querySelector('.world')!;
 
@@ -28,12 +30,10 @@ export class Game {
         // Create held fruit
         for (let i = 0; i < numPlayers; i++) {
             const iAmt = i / numPlayers;
-            const nextIAmt = (i + 1) / numPlayers;
+            const angle = iAmt * 2 * Math.PI;
+            const angleDelta = (1 / numPlayers) * 2 * Math.PI;
 
-            const minAngle = iAmt * 2 * Math.PI;
-            const maxAngle = nextIAmt * 2 * Math.PI;
-
-            const heldFruit = new HeldFruit(minAngle, maxAngle);
+            const heldFruit = new HeldFruit(angle, angleDelta / 2);
             this.heldFruit.push(heldFruit);
             this.container.appendChild(heldFruit.elem);
         }
@@ -42,27 +42,88 @@ export class Game {
         this.render();
 
         document.addEventListener('mousedown', (event) => {
-            this.dropFruit();
-        });
-
-        document.addEventListener('touchend', (event) => {
-            this.dropFruit();
-            event.preventDefault();
+            for (let i = 0; i < this.heldFruit.length; i++) {
+                if (this.isInHeldItemRange(i, event.clientX, event.clientY)) {
+                    this.dropFruit(i);
+                    break;
+                }
+            }
         });
 
         document.addEventListener('mousemove', (event) => {
-            this.updateHeldItemPosition(event.clientX, event.clientY);
+            for (let i = 0; i < this.heldFruit.length; i++) {
+                if (this.isInHeldItemRange(i, event.clientX, event.clientY)) {
+                    this.updateHeldItemPosition(i, event.clientX, event.clientY);
+                    break;
+                }
+            }
         });
 
         document.addEventListener('touchstart', (event) => {
-            const touch = event.touches[0];
-            this.updateHeldItemPosition(touch.clientX, touch.clientY);
+            for (let t = 0; t < event.changedTouches.length; t++) {
+                const touch = event.changedTouches[t];
+
+                for (let i = 0; i < this.heldFruit.length; i++) {
+                    if (this.isInHeldItemRange(i, touch.clientX, touch.clientY)) {
+                        this.fruitIndexToTouchId.set(i, touch.identifier);
+                        this.updateHeldItemPosition(i, touch.clientX, touch.clientY);
+                        break;
+                    }
+                }
+
+            }
             event.preventDefault();
         });
 
         document.addEventListener('touchmove', (event) => {
-            const touch = event.touches[0];
-            this.updateHeldItemPosition(touch.clientX, touch.clientY);
+            for (let i = 0; i < this.heldFruit.length; i++) {
+                const touchId = this.fruitIndexToTouchId.get(i);
+                if (touchId == undefined) {
+                    continue;
+                }
+
+                let touch: Touch | undefined;
+                for (let t = 0; t < event.changedTouches.length; t++) {
+                    if (event.changedTouches[t].identifier === touchId) {
+                        touch = event.changedTouches[t];
+                        break;
+                    }
+                }
+
+                if (touch == undefined) {
+                    continue;
+                }
+
+                this.updateHeldItemPosition(i, touch.clientX, touch.clientY);
+            }
+            event.preventDefault();
+        });
+
+        document.addEventListener('touchend', (event) => {
+            for (let i = 0; i < this.heldFruit.length; i++) {
+                const touchId = this.fruitIndexToTouchId.get(i);
+                if (touchId == undefined) {
+                    continue;
+                }
+
+                let touch: Touch | undefined;
+                for (let t = 0; t < event.changedTouches.length; t++) {
+                    if (event.changedTouches[t].identifier === touchId) {
+                        touch = event.changedTouches[t];
+                        break;
+                    }
+                }
+
+                if (touch == undefined) {
+                    continue;
+                }
+
+                this.updateHeldItemPosition(i, touch.clientX, touch.clientY);
+                this.dropFruit(i);
+
+                this.fruitIndexToTouchId.delete(i);
+            }
+
             event.preventDefault();
         });
 
@@ -74,26 +135,35 @@ export class Game {
         });
     }
 
-    updateHeldItemPosition(clientX: number, clientY: number) {
+    isInHeldItemRange(index: number, clientX: number, clientY: number) {
         const rect = this.container.getBoundingClientRect();
         const x = clientX - (rect.left + rect.width / 2);
         const y = clientY - (rect.top + rect.height / 2);
 
-        this.heldFruit[0].setElemPosition(x, y);
+        return this.heldFruit[index].isInRange(x, y);
     }
 
-    dropFruit() {
-        const fruit = this.heldFruit[0].createFruit(this.world);
+    updateHeldItemPosition(index: number, clientX: number, clientY: number) {
+        const rect = this.container.getBoundingClientRect();
+        const x = clientX - (rect.left + rect.width / 2);
+        const y = clientY - (rect.top + rect.height / 2);
+
+        this.heldFruit[index].setElemPosition(x, y);
+    }
+
+    dropFruit(index: number) {
+        const heldFruit = this.heldFruit[index];
+        const fruit = heldFruit.createFruit(this.world);
 
         this.container.appendChild(fruit.elem);
 
-        this.heldFruit[0].elem.remove();
+        heldFruit.elem.remove();
 
-        const newFruit = new HeldFruit(this.heldFruit[0].minAngle, this.heldFruit[0].maxAngle);
-        newFruit.setElemPosition(this.heldFruit[0].posDisp.x, this.heldFruit[0].posDisp.y);
+        const newFruit = new HeldFruit(heldFruit.middleAngle, heldFruit.halfAngleDelta);
+        newFruit.setElemPosition(heldFruit.posDisp.x, heldFruit.posDisp.y);
+        this.container.appendChild(newFruit.elem);
 
-        this.heldFruit[0] = newFruit;
-        this.container.appendChild(this.heldFruit[0].elem);
+        this.heldFruit[index] = newFruit;
     }
 
     start() {

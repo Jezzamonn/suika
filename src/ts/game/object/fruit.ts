@@ -107,15 +107,12 @@ export class HeldFruit {
     elem: HTMLElement;
     fruitType: number;
     posDisp: Vec2;
-    middleAngle: number;
-    halfAngleDelta: number;
+    dropped = false;
 
-    constructor(public minAngle: number, public maxAngle: number) {
+    constructor(public middleAngle: number, public halfAngleDelta: number) {
         this.fruitType = Math.floor(rng() * Fruit.maxSpawnType + 1);
         this.elem = Fruit.createElem(this.fruitType);
         this.elem.classList.add('held-fruit');
-        this.middleAngle = (minAngle + maxAngle) / 2;
-        this.halfAngleDelta = (maxAngle - minAngle) / 2;
 
         this.posDisp = new Vec2(
             Math.cos(this.middleAngle) * holdRadius,
@@ -125,6 +122,19 @@ export class HeldFruit {
         this.updateElemPosition();
     }
 
+    isInRange(x: number, y: number) {
+        let angle = Math.atan2(y, x);
+        let angleDiff = (angle - this.middleAngle) % (2 * Math.PI);
+        while (angleDiff < -Math.PI) {
+            angleDiff += 2 * Math.PI;
+        }
+        while (angleDiff > Math.PI) {
+            angleDiff -= 2 * Math.PI;
+        }
+
+        return Math.abs(angleDiff) < this.halfAngleDelta;
+    }
+
     get radiusDisp() {
         return Fruit.getRadiusDisp(this.fruitType);
     }
@@ -132,6 +142,9 @@ export class HeldFruit {
     createFruit(world: World): Fruit {
         const fruit = new Fruit(world, this.fruitType);
         fruit.body.setPosition(this.posDisp.clone().mul(DISPLAY_TO_M));
+
+        this.dropped = true;
+
         return fruit;
     }
 
