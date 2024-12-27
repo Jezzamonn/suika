@@ -19,7 +19,7 @@ export function makeDividers(numPlayers: number): SVGElement[] {
 
         const d = `M 50 50 L ${startX} ${startY} A 50 50 0 0 1 ${endX} ${endY} Z`;
         path.setAttribute('d', d);
-        path.setAttribute('fill', '#ddd');
+        path.setAttribute('fill', 'rgb(214, 212, 230)');
 
         divider.appendChild(path);
 
