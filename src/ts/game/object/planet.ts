@@ -2,7 +2,7 @@ import { Circle, Vec2, World } from "planck";
 import { DISPLAY_TO_M } from "../constants";
 import { PhysObject } from "./phys-object";
 
-export const planetRadiusDisp = 40;
+export const planetRadiusDisp = 50 / 5;
 
 export class Planet implements PhysObject {
     body: any;
@@ -21,8 +21,8 @@ export class Planet implements PhysObject {
 
         this.elem = document.createElement('div');
         this.elem.className = 'planet world-object';
-        this.elem.style.width = `${planetRadiusDisp * 2}px`;
-        this.elem.style.height = `${planetRadiusDisp * 2}px`;
+        this.elem.style.width = `${planetRadiusDisp * 2}cqmin`;
+        this.elem.style.height = `${planetRadiusDisp * 2}cqmin`;
         this.elem.style.backgroundColor = 'rgb(28, 28, 64)';
 
         this.body.setUserData(this);

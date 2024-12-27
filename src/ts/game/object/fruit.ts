@@ -1,4 +1,5 @@
 import { Circle, Vec2, World } from "planck";
+import { clamp } from "../../lib/util";
 import { DISPLAY_TO_M, rng } from "../constants";
 import { PhysObject } from "./phys-object";
 
@@ -34,7 +35,7 @@ export class Fruit implements PhysObject {
 
         this.body.createFixture({
             shape: new Circle(radiusDisp * DISPLAY_TO_M),
-            density: 1.0,
+            density: 0.5,
         });
 
         this.elem = Fruit.createElem(fruitType);
@@ -43,7 +44,7 @@ export class Fruit implements PhysObject {
     }
 
     static getRadiusDisp(fruitType: number): number {
-        return 2.5 + 6 * fruitType;
+        return 0.3 + 0.7 * fruitType;
     }
 
     static createElem(fruitType: number): HTMLElement {
@@ -51,8 +52,8 @@ export class Fruit implements PhysObject {
 
         const elem = document.createElement('div');
         elem.className = 'circle world-object';
-        elem.style.width = `${radiusDisp * 2}px`;
-        elem.style.height = `${radiusDisp * 2}px`;
+        elem.style.width = `${radiusDisp * 2}cqmin`;
+        elem.style.height = `${radiusDisp * 2}cqmin`;
 
         elem.style.backgroundColor = colors[fruitType];
 
@@ -67,8 +68,8 @@ export class Fruit implements PhysObject {
         const pos = this.body.getPosition();
         const xDisp = pos.x / DISPLAY_TO_M;
         const yDisp = pos.y / DISPLAY_TO_M;
-        this.elem.style.left = `${xDisp - this.radiusDisp}px`;
-        this.elem.style.top = `${yDisp - this.radiusDisp}px`;
+        this.elem.style.left = `${xDisp - this.radiusDisp + 50}cqmin`;
+        this.elem.style.top = `${yDisp - this.radiusDisp + 50}cqmin`;
     }
 
     static merge(fruitA: Fruit, fruitB: Fruit, world: World, container: HTMLElement) {
@@ -100,15 +101,28 @@ export class Fruit implements PhysObject {
     }
 }
 
+const holdRadius = 50;
+
 export class HeldFruit {
     elem: HTMLElement;
     fruitType: number;
     posDisp: Vec2;
+    middleAngle: number;
+    halfAngleDelta: number;
 
-    constructor() {
+    constructor(public minAngle: number, public maxAngle: number) {
         this.fruitType = Math.floor(rng() * Fruit.maxSpawnType + 1);
         this.elem = Fruit.createElem(this.fruitType);
         this.elem.classList.add('held-fruit');
+        this.middleAngle = (minAngle + maxAngle) / 2;
+        this.halfAngleDelta = (maxAngle - minAngle) / 2;
+
+        this.posDisp = new Vec2(
+            Math.cos(this.middleAngle) * holdRadius,
+            Math.sin(this.middleAngle) * holdRadius,
+        );
+
+        this.updateElemPosition();
     }
 
     get radiusDisp() {
@@ -121,9 +135,30 @@ export class HeldFruit {
         return fruit;
     }
 
-    setElemPosition(posDisp: Vec2) {
-        this.posDisp = posDisp;
-        this.elem.style.left = `${posDisp.x - this.radiusDisp}px`;
-        this.elem.style.top = `${posDisp.y - this.radiusDisp}px`;
+    setElemPosition(x: number, y: number) {
+        let angle = Math.atan2(y, x);
+        let angleDiff = (angle - this.middleAngle) % (2 * Math.PI);
+        if (angleDiff < -Math.PI) {
+            angleDiff += 2 * Math.PI;
+        }
+        if (angleDiff > Math.PI) {
+            angleDiff -= 2 * Math.PI;
+        }
+
+        // Now clamp to the angle range
+        angleDiff = clamp(angleDiff, -this.halfAngleDelta, this.halfAngleDelta);
+        angle = this.middleAngle + angleDiff;
+
+        this.posDisp = new Vec2(
+            Math.cos(angle) * holdRadius,
+            Math.sin(angle) * holdRadius,
+        );
+
+        this.updateElemPosition();
+    }
+
+    private updateElemPosition() {
+        this.elem.style.left = `${this.posDisp.x - this.radiusDisp + 50}cqmin`;
+        this.elem.style.top = `${this.posDisp.y - this.radiusDisp + 50}cqmin`;
     }
 }

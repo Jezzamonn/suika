@@ -33,16 +33,19 @@ p {
     width: 0;
     height: 0;
     position: relative;
+    width: 80vmin;
+    height: 80vmin;
 
     display: flex;
     align-items: center;
     justify-content: center;
+    container-type: size;
 }
 
 .world-bg {
     position: absolute;
-    width: 500px;
-    height: 500px;
+    width: 90cqmin;
+    height: 90cqmin;
     background-color: #f0f0f0;
     z-index: -1;
     border-radius: 50%;

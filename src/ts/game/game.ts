@@ -12,10 +12,9 @@ export class Game {
 
     private unresolvedCollisions: PhysObject[][] = [];
 
-    private heldFruit: HeldFruit;
-    private nextFruit: HeldFruit;
+    private heldFruit: HeldFruit[] = [];
 
-    constructor() {
+    constructor(numPlayers: number) {
         this.container = document.querySelector('.world')!;
 
         this.world = new World({
@@ -27,11 +26,17 @@ export class Game {
         this.container.appendChild(planet.elem);
 
         // Create held fruit
-        this.heldFruit = new HeldFruit();
-        // this.nextFruit = new HeldFruit();
+        for (let i = 0; i < numPlayers; i++) {
+            const iAmt = i / numPlayers;
+            const nextIAmt = (i + 1) / numPlayers;
 
-        this.container.appendChild(this.heldFruit.elem);
-        // this.container.appendChild(this.nextFruit.elem);
+            const minAngle = iAmt * 2 * Math.PI;
+            const maxAngle = nextIAmt * 2 * Math.PI;
+
+            const heldFruit = new HeldFruit(minAngle, maxAngle);
+            this.heldFruit.push(heldFruit);
+            this.container.appendChild(heldFruit.elem);
+        }
 
         // Update all the positions
         this.render();
@@ -42,15 +47,23 @@ export class Game {
 
         document.addEventListener('touchend', (event) => {
             this.dropFruit();
+            event.preventDefault();
         });
 
         document.addEventListener('mousemove', (event) => {
             this.updateHeldItemPosition(event.clientX, event.clientY);
         });
 
+        document.addEventListener('touchstart', (event) => {
+            const touch = event.touches[0];
+            this.updateHeldItemPosition(touch.clientX, touch.clientY);
+            event.preventDefault();
+        });
+
         document.addEventListener('touchmove', (event) => {
             const touch = event.touches[0];
             this.updateHeldItemPosition(touch.clientX, touch.clientY);
+            event.preventDefault();
         });
 
         this.world.on('begin-contact', (contact) => {
@@ -63,29 +76,24 @@ export class Game {
 
     updateHeldItemPosition(clientX: number, clientY: number) {
         const rect = this.container.getBoundingClientRect();
-        const x = clientX - rect.left;
-        const y = clientY - rect.top;
+        const x = clientX - (rect.left + rect.width / 2);
+        const y = clientY - (rect.top + rect.height / 2);
 
-        const radius = 300;
-        const pos = new Vec2(x, y)
-        const existingDist = pos.length();
-        pos.mul(radius / existingDist);
-
-        this.heldFruit.setElemPosition(pos);
+        this.heldFruit[0].setElemPosition(x, y);
     }
 
     dropFruit() {
-        const fruit = this.heldFruit.createFruit(this.world);
+        const fruit = this.heldFruit[0].createFruit(this.world);
 
         this.container.appendChild(fruit.elem);
 
-        this.heldFruit.elem.remove();
+        this.heldFruit[0].elem.remove();
 
-        const newFruit = new HeldFruit();
-        newFruit.setElemPosition(this.heldFruit.posDisp);
+        const newFruit = new HeldFruit(this.heldFruit[0].minAngle, this.heldFruit[0].maxAngle);
+        newFruit.setElemPosition(this.heldFruit[0].posDisp.x, this.heldFruit[0].posDisp.y);
 
-        this.heldFruit = newFruit;
-        this.container.appendChild(this.heldFruit.elem);
+        this.heldFruit[0] = newFruit;
+        this.container.appendChild(this.heldFruit[0].elem);
     }
 
     start() {
