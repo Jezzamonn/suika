@@ -2,16 +2,21 @@ import { Game } from "./game/game";
 
 const urlParams = new URLSearchParams(window.location.search);
 const numFruits = parseInt(urlParams.get('players') || '2');
-let game = new Game(numFruits);
+let game: Game | undefined;
 
-game.onResetTriggered = () => {
+const reset = () => {
     console.log('clicked');
-    if (game.gameOver) {
-        game.clearAll();
+    if (game?.gameOver ?? false) {
+        game?.clearAll();
 
-        game = new Game(numFruits);
-        game.start();
+        newGame();
     }
 };
 
-game.start();
+function newGame() {
+    let game = new Game(numFruits);
+    game.start();
+    game.onResetTriggered = reset;
+}
+
+newGame();
