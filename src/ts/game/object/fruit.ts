@@ -49,7 +49,7 @@ export class Fruit implements PhysObject {
 
     static getRadiusDisp(fruitType: number): number {
         const amt = fruitType / Fruit.maxFruitType;
-        return experp(0.8, 10, amt);
+        return experp(0.8, 10, amt) * 1.3;
     }
 
     static createElem(fruitType: number): HTMLElement {
