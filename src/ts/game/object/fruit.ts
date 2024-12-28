@@ -16,7 +16,10 @@ const colors = [
     'rgb(227, 205, 57)',  // pineapple
     'rgb(139, 203, 99)',  // cantaloupe
     'rgb(13, 115, 45)', // watermelon
-]
+];
+
+const preloadedAudio = new Audio();
+preloadedAudio.src = 'sfx/pop.mp3';
 
 export class Fruit implements PhysObject {
     static maxFruitType = 10;
@@ -91,7 +94,7 @@ export class Fruit implements PhysObject {
         }
     }
 
-    static merge(fruitA: Fruit, fruitB: Fruit, world: World, container: HTMLElement) {
+    static merge(fruitA: Fruit, fruitB: Fruit, world: World, container: HTMLElement, actionQueue: (() => void)[]) {
         if (fruitA.fruitType === fruitB.fruitType && !fruitA.destroyed && !fruitB.destroyed) {
             const posA = fruitA.body.getPosition();
             const posB = fruitB.body.getPosition();
@@ -104,9 +107,21 @@ export class Fruit implements PhysObject {
             container.removeChild(fruitA.elem);
             container.removeChild(fruitB.elem);
             fruitA.destroyed = true;
-            fruitB.destroyed = true
+            fruitB.destroyed = true;
 
             const newFruitType = fruitA.fruitType + 1;
+            const newFruitAmt = newFruitType / Fruit.maxFruitType;
+
+            actionQueue.push(() => {
+                const newAudio = preloadedAudio.cloneNode() as HTMLAudioElement;
+                newAudio.volume = 0.3;
+                newAudio.playbackRate = experp(1.2, 0.6, newFruitAmt);
+                newAudio.preservesPitch = false;
+                (newAudio as any).mozPreservesPitch = false;
+                (newAudio as any).webkitPreservesPitch = false;
+                newAudio.play();
+            });
+
             if (newFruitType > Fruit.maxFruitType) {
                 return;
             }

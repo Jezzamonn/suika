@@ -20,6 +20,8 @@ export class Game {
     private fruitIndexToTouchId: Map<number, number> = new Map();
     private gameOver = false;
 
+    private oncePerFrameActionQueue: (() => void)[] = [];
+
     constructor(numPlayers: number) {
         this.container = document.querySelector('.world')!;
 
@@ -193,6 +195,9 @@ export class Game {
         }
 
         this.render();
+        if (this.oncePerFrameActionQueue.length > 0) {
+            this.oncePerFrameActionQueue.pop()!();
+        }
 
         requestAnimationFrame(() => this.doAnimationLoop());
     }
@@ -228,7 +233,7 @@ export class Game {
             }
 
             if (objA instanceof Fruit && objB instanceof Fruit) {
-                Fruit.merge(objA, objB, this.world, this.container);
+                Fruit.merge(objA, objB, this.world, this.container, this.oncePerFrameActionQueue);
             }
          }
         this.unresolvedCollisions = [];
