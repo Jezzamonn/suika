@@ -94,7 +94,7 @@ export class Fruit implements PhysObject {
         }
     }
 
-    static merge(fruitA: Fruit, fruitB: Fruit, world: World, container: HTMLElement, actionQueue: (() => void)[]) {
+    static merge(fruitA: Fruit, fruitB: Fruit, world: World, container: HTMLElement) {
         if (fruitA.fruitType === fruitB.fruitType && !fruitA.destroyed && !fruitB.destroyed) {
             const posA = fruitA.body.getPosition();
             const posB = fruitB.body.getPosition();
@@ -112,15 +112,13 @@ export class Fruit implements PhysObject {
             const newFruitType = fruitA.fruitType + 1;
             const newFruitAmt = newFruitType / Fruit.maxFruitType;
 
-            actionQueue.push(() => {
-                const newAudio = preloadedAudio.cloneNode() as HTMLAudioElement;
-                newAudio.volume = 0.3;
-                newAudio.playbackRate = experp(1.2, 0.6, newFruitAmt);
-                newAudio.preservesPitch = false;
-                (newAudio as any).mozPreservesPitch = false;
-                (newAudio as any).webkitPreservesPitch = false;
-                newAudio.play();
-            });
+            const newAudio = preloadedAudio.cloneNode() as HTMLAudioElement;
+            newAudio.volume = 0.3;
+            newAudio.playbackRate = experp(1.2, 0.6, newFruitAmt);
+            newAudio.preservesPitch = false;
+            (newAudio as any).mozPreservesPitch = false;
+            (newAudio as any).webkitPreservesPitch = false;
+            newAudio.play();
 
             if (newFruitType > Fruit.maxFruitType) {
                 return;

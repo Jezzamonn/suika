@@ -18,9 +18,11 @@ export class Game {
     private heldFruit: HeldFruit[] = [];
 
     private fruitIndexToTouchId: Map<number, number> = new Map();
-    private gameOver = false;
+    gameOver = false;
 
-    private oncePerFrameActionQueue: (() => void)[] = [];
+    private removeEventListeners: () => void;
+
+    public onResetTriggered = () => {};
 
     constructor(numPlayers: number) {
         this.container = document.querySelector('.world')!;
@@ -52,39 +54,38 @@ export class Game {
         // Update all the positions
         this.render();
 
-        document.addEventListener('mousedown', (event) => {
+        const onMouseDown = (event: MouseEvent) => {
             for (let i = 0; i < this.heldFruit.length; i++) {
                 if (this.isInHeldItemRange(i, event.clientX, event.clientY)) {
                     this.dropFruit(i);
                     break;
                 }
             }
-        });
+        };
 
-        document.addEventListener('mousemove', (event) => {
+        const onMouseMove = (event: MouseEvent) => {
             for (let i = 0; i < this.heldFruit.length; i++) {
                 if (this.isInHeldItemRange(i, event.clientX, event.clientY)) {
                     this.updateHeldItemPosition(i, event.clientX, event.clientY);
                     break;
                 }
             }
-        });
+        };
 
-        document.addEventListener('touchstart', (event) => {
+        const onTouchStart = (event: TouchEvent) => {
             for (const touch of event.changedTouches) {
                 for (let i = 0; i < this.heldFruit.length; i++) {
                     if (this.isInHeldItemRange(i, touch.clientX, touch.clientY)) {
-                        this.fruitIndexToTouchId.set(i, touch.identifier);
-                        this.updateHeldItemPosition(i, touch.clientX, touch.clientY);
-                        break;
+                    this.fruitIndexToTouchId.set(i, touch.identifier);
+                    this.updateHeldItemPosition(i, touch.clientX, touch.clientY);
+                    break;
                     }
                 }
-
             }
             event.preventDefault();
-        }, { passive: false });
+        };
 
-        document.addEventListener('touchmove', (event) => {
+        const onTouchMove = (event: TouchEvent) => {
             for (let i = 0; i < this.heldFruit.length; i++) {
                 const touchId = this.fruitIndexToTouchId.get(i);
                 if (touchId == undefined) {
@@ -100,9 +101,9 @@ export class Game {
                 this.updateHeldItemPosition(i, touch.clientX, touch.clientY);
             }
             event.preventDefault();
-        }, { passive: false });
+        };
 
-        document.addEventListener('touchend', (event) => {
+        const onTouchEnd = (event: TouchEvent) => {
             for (let i = 0; i < this.heldFruit.length; i++) {
                 const touchId = this.fruitIndexToTouchId.get(i);
                 if (touchId == undefined) {
@@ -122,15 +123,41 @@ export class Game {
             }
 
             event.preventDefault();
-        }, { passive: false });
+        };
 
-        document.addEventListener('keydown', (event) => {
+        const onKeyDown = (event: KeyboardEvent) => {
             if (event.code === 'Space') {
                 for (let i = 0; i < this.heldFruit.length; i++) {
                     this.dropFruit(i);
                 }
             }
-        });
+        };
+
+        const maybeEndGame = (event: MouseEvent) => {
+            if (this.gameOver) {
+                this.clearAll();
+                this.removeEventListeners();
+                this.onResetTriggered();
+            }
+        }
+
+        document.addEventListener('mousedown', onMouseDown);
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('touchstart', onTouchStart, { passive: false });
+        document.addEventListener('touchmove', onTouchMove, { passive: false });
+        document.addEventListener('touchend', onTouchEnd, { passive: false });
+        document.addEventListener('keydown', onKeyDown);
+        planet.elem.addEventListener('click', maybeEndGame);
+
+        this.removeEventListeners = () => {
+            document.removeEventListener('mousedown', onMouseDown);
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('touchstart', onTouchStart);
+            document.removeEventListener('touchmove', onTouchMove);
+            document.removeEventListener('touchend', onTouchEnd);
+            document.removeEventListener('keydown', onKeyDown);
+            planet.elem.removeEventListener('click', maybeEndGame);
+        };
 
         this.world.on('begin-contact', (contact) => {
             const objA = contact.getFixtureA().getBody().getUserData() as PhysObject;
@@ -195,9 +222,6 @@ export class Game {
         }
 
         this.render();
-        if (this.oncePerFrameActionQueue.length > 0) {
-            this.oncePerFrameActionQueue.pop()!();
-        }
 
         requestAnimationFrame(() => this.doAnimationLoop());
     }
@@ -217,6 +241,18 @@ export class Game {
             heldFruit.elem.remove();
         }
         this.heldFruit = [];
+    }
+
+    clearAll() {
+        // Remove all items created by this game. Just remove all children of the container.
+        const children = [...this.container.children];
+        for (const child of children) {
+            if (child.classList.contains('dont-remove')) {
+                continue;
+            }
+            child.remove();
+        }
+        this.removeEventListeners();
     }
 
     update(dt: number) {
@@ -243,7 +279,7 @@ export class Game {
             }
 
             if (objA instanceof Fruit && objB instanceof Fruit) {
-                Fruit.merge(objA, objB, this.world, this.container, this.oncePerFrameActionQueue);
+                Fruit.merge(objA, objB, this.world, this.container);
             }
          }
         this.unresolvedCollisions = [];
