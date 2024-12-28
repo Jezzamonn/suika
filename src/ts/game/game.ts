@@ -209,6 +209,16 @@ export class Game {
         }
     }
 
+    endGame() {
+        this.gameOver = true;
+
+        // Remove all held items.
+        for (const heldFruit of this.heldFruit) {
+            heldFruit.elem.remove();
+        }
+        this.heldFruit = [];
+    }
+
     update(dt: number) {
         if (this.gameOver) {
             return;
@@ -243,7 +253,7 @@ export class Game {
                 const fruit = body.getUserData() as Fruit;
                 fruit.updateIsOutsideBoundsCount(dt);
                 if (fruit.isOutsideBoundsCount > maxOutsideBoundsTime) {
-                    this.gameOver = true;
+                    this.endGame();
                 }
             }
         }
