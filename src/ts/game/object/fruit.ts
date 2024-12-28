@@ -1,6 +1,7 @@
 import { Circle, Vec2, World } from "planck";
 import { clamp, experp } from "../../lib/util";
 import { DISPLAY_TO_M, rng } from "../constants";
+import { pop } from "../sfx";
 import * as divider from './divider';
 import { PhysObject } from "./phys-object";
 
@@ -17,9 +18,6 @@ const colors = [
     'rgb(139, 203, 99)',  // cantaloupe
     'rgb(13, 115, 45)', // watermelon
 ];
-
-const preloadedAudio = new Audio();
-preloadedAudio.src = 'sfx/pop.mp3';
 
 export class Fruit implements PhysObject {
     static maxFruitType = 10;
@@ -112,13 +110,7 @@ export class Fruit implements PhysObject {
             const newFruitType = fruitA.fruitType + 1;
             const newFruitAmt = newFruitType / Fruit.maxFruitType;
 
-            const newAudio = preloadedAudio.cloneNode() as HTMLAudioElement;
-            newAudio.volume = 0.3;
-            newAudio.playbackRate = experp(1.2, 0.6, newFruitAmt);
-            newAudio.preservesPitch = false;
-            (newAudio as any).mozPreservesPitch = false;
-            (newAudio as any).webkitPreservesPitch = false;
-            newAudio.play();
+            pop(newFruitAmt);
 
             if (newFruitType > Fruit.maxFruitType) {
                 return;
