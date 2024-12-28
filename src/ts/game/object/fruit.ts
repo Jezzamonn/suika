@@ -5,7 +5,7 @@ import * as divider from './divider';
 import { PhysObject } from "./phys-object";
 
 const colors = [
-    'rgb(245, 39, 39)',   // cherry
+    'rgb(217, 21, 76)',   // cherry
     'rgb(248, 69, 69)', // strawberry
     'rgb(142, 69, 133)',  // grapes
     'rgb(248, 170, 53)',   // dekopon
@@ -132,7 +132,7 @@ export class HeldFruit {
     halfAngleDeltaAfterDivider: number;
 
     constructor(public middleAngle: number, public halfAngleDelta: number) {
-        this.fruitType = Math.floor(rng() * Fruit.maxSpawnType + 1);
+        this.fruitType = Math.floor(rng() * (Fruit.maxSpawnType + 1));
         this.elem = Fruit.createElem(this.fruitType);
         this.elem.classList.add('held-fruit');
 
