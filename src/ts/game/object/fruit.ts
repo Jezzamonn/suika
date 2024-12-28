@@ -134,6 +134,7 @@ export class Fruit implements PhysObject {
 }
 
 export const holdRadiusDisp = 50;
+export const nextRadiusDisp = 58;
 
 export class HeldFruit {
     elem: HTMLElement;
@@ -149,17 +150,16 @@ export class HeldFruit {
         this.elem = Fruit.createElem(this.fruitType);
         this.elem.classList.add('held-fruit');
 
-        this.posDisp = new Vec2(
-            Math.cos(this.middleAngle) * holdRadiusDisp,
-            Math.sin(this.middleAngle) * holdRadiusDisp,
-        );
-
         this.halfAngleDeltaAfterDivider = this.halfAngleDelta - divider.halfArcSize;
 
         const radiusDisp = Fruit.getRadiusDisp(this.fruitType);
         const radiusAngle = radiusDisp / holdRadiusDisp;
         this.halfAngleDeltaAfterPadding = this.halfAngleDeltaAfterDivider - radiusAngle;
 
+        this.posDisp = new Vec2(
+            Math.cos(this.middleAngle) * nextRadiusDisp,
+            Math.sin(this.middleAngle) * nextRadiusDisp,
+        );
         this.updateElemPosition();
     }
 

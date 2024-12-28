@@ -16,6 +16,7 @@ export class Game {
     private unresolvedCollisions: PhysObject[][] = [];
 
     private heldFruit: HeldFruit[] = [];
+    private nextFruit: HeldFruit[] = [];
 
     private fruitIndexToTouchId: Map<number, number> = new Map();
     gameOver = false;
@@ -35,13 +36,19 @@ export class Game {
         const planet = new Planet(this.world);
         this.container.appendChild(planet.elem);
 
-        // Create held fruit
+        // Create held fruit / next fruit
         for (let i = 0; i < numPlayers; i++) {
             const iAmt = i / numPlayers;
             const angle = iAmt * 2 * Math.PI + 0.5 * Math.PI;
             const angleDelta = (1 / numPlayers) * 2 * Math.PI;
 
+            const nextFruit = new HeldFruit(angle, angleDelta / 2);
+            this.nextFruit.push(nextFruit);
+            this.container.appendChild(nextFruit.elem);
+
             const heldFruit = new HeldFruit(angle, angleDelta / 2);
+            // Hacky
+            heldFruit.setElemPosition(heldFruit.posDisp.x, heldFruit.posDisp.y);
             this.heldFruit.push(heldFruit);
             this.container.appendChild(heldFruit.elem);
         }
@@ -191,11 +198,16 @@ export class Game {
 
         heldFruit.elem.remove();
 
-        const newFruit = new HeldFruit(heldFruit.middleAngle, heldFruit.halfAngleDelta);
-        newFruit.setElemPosition(heldFruit.posDisp.x, heldFruit.posDisp.y);
-        this.container.appendChild(newFruit.elem);
+        // Move next fruit into held fruit position
+        const nextFruit = this.nextFruit[index];
+        nextFruit.setElemPosition(heldFruit.posDisp.x, heldFruit.posDisp.y);
+        this.container.appendChild(nextFruit.elem);
+        this.heldFruit[index] = nextFruit;
 
-        this.heldFruit[index] = newFruit;
+        // Create new next fruit
+        const newFruit = new HeldFruit(heldFruit.middleAngle, heldFruit.halfAngleDelta);
+        this.container.appendChild(newFruit.elem);
+        this.nextFruit[index] = newFruit;
     }
 
     start() {
