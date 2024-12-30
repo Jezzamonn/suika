@@ -60,6 +60,8 @@ export class Fruit implements PhysObject {
         elem.className = 'circle world-object';
         elem.style.width = `${radiusDisp * 2}cqmin`;
         elem.style.height = `${radiusDisp * 2}cqmin`;
+        const fruitClass = (rng() < 0.5) ? 'fruit-type1' : 'fruit-type2';
+        elem.classList.add('fruit', fruitClass);
 
         elem.style.backgroundColor = colors[fruitType];
 
@@ -76,6 +78,7 @@ export class Fruit implements PhysObject {
         const yDisp = pos.y / DISPLAY_TO_M;
         this.elem.style.left = `${xDisp - this.radiusDisp + 50}cqmin`;
         this.elem.style.top = `${yDisp - this.radiusDisp + 50}cqmin`;
+        this.elem.style.rotate = `${this.body.getAngle()}rad`;
     }
 
     isOutsideBounds() {
@@ -133,6 +136,7 @@ export class HeldFruit {
     fruitType: number;
     posDisp: Vec2;
     dropped = false;
+    rotation = 0;
 
     halfAngleDeltaAfterPadding: number;
     halfAngleDeltaAfterDivider: number;
@@ -175,6 +179,7 @@ export class HeldFruit {
     createFruit(world: World): Fruit {
         const fruit = new Fruit(world, this.fruitType);
         fruit.body.setPosition(this.posDisp.clone().mul(DISPLAY_TO_M));
+        fruit.body.setAngle(this.rotation);
 
         this.dropped = true;
 
@@ -200,11 +205,14 @@ export class HeldFruit {
             Math.sin(angle) * holdRadiusDisp,
         );
 
+        this.rotation = angle + 0.5 * Math.PI;
+
         this.updateElemPosition();
     }
 
     private updateElemPosition() {
         this.elem.style.left = `${this.posDisp.x - this.radiusDisp + 50}cqmin`;
         this.elem.style.top = `${this.posDisp.y - this.radiusDisp + 50}cqmin`;
+        this.elem.style.rotate = `${this.rotation}rad`;
     }
 }

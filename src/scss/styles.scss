@@ -51,6 +51,16 @@ p {
     border-radius: 50%;
 }
 
+.fruit-type1 {
+    background-image: url("../img/happy.svg");
+    background-size: contain;
+}
+
+.fruit-type2 {
+    background-image: url("../img/glee.svg");
+    background-size: contain;
+}
+
 .divider {
     position: absolute;
     z-index: -3;
