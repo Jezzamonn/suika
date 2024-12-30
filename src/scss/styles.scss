@@ -61,6 +61,14 @@ p {
     background-size: contain;
 }
 
+.danger .fruit-type1 {
+    background-image: url("../img/ouch.svg");
+}
+
+.danger .fruit-type2 {
+    background-image: url("../img/shock.svg");
+}
+
 .divider {
     position: absolute;
     z-index: -3;

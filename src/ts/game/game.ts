@@ -296,15 +296,20 @@ export class Game {
          }
         this.unresolvedCollisions = [];
 
+        let maxCountSeen = 0;
         for (let body = this.world.getBodyList(); body; body = body.getNext()) {
             if (body.getUserData() instanceof Fruit) {
                 const fruit = body.getUserData() as Fruit;
                 fruit.updateIsOutsideBoundsCount(dt);
+                maxCountSeen = Math.max(maxCountSeen, fruit.isOutsideBoundsCount);
                 if (fruit.isOutsideBoundsCount > maxOutsideBoundsTime) {
                     this.endGame();
                 }
             }
         }
+
+        const worldElem = this.container;
+        worldElem.classList.toggle('danger', maxCountSeen > 0.1);
     }
 
 }
