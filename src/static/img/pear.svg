@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="200"
+   height="200"
+   viewBox="0 0 200 200"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.2 (e86c8708, 2021-01-15)"
+   sodipodi:docname="pear.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.3649604"
+     inkscape:cx="130.50041"
+     inkscape:cy="96.941883"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer4"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     units="px"
+     inkscape:pagecheckerboard="true"
+     inkscape:snap-global="false"
+     inkscape:window-width="1440"
+     inkscape:window-height="781"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     showguides="true"
+     inkscape:guide-bbox="true">
+    <sodipodi:guide
+       position="-71.23249,150.2182"
+       orientation="0,-1"
+       id="guide1056" />
+    <sodipodi:guide
+       position="5.6662208,50.249879"
+       orientation="0,-1"
+       id="guide1058" />
+    <sodipodi:guide
+       position="50.186527,174.09728"
+       orientation="1,0"
+       id="guide1060" />
+    <sodipodi:guide
+       position="150.15485,150.2182"
+       orientation="1,0"
+       id="guide1062" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Fruit"
+     inkscape:groupmode="layer"
+     id="layer1" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="Fruit2"
+     style="display:inline">
+    <path
+       id="path5513"
+       style="fill:#cfd632;fill-opacity:0.929412;stroke:#99aa0f;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
+       d="M 100.2371,44.848499 C 88.952684,45.6494 83.036782,46.894536 73.875166,59.918854 59.624761,71.361922 52.000075,82.861809 52,99.967136 c 4e-6,26.354384 21.490312,47.718854 48,47.718924 26.50969,-7e-5 48,-21.36454 48,-47.718924 C 147.99988,83.54276 139.95627,73.474348 129.1309,62.032182 120.86182,53.526451 117.07586,44.65669 100.2371,44.848499 Z"
+       sodipodi:nodetypes="ccccccc" />
+    <path
+       style="fill:none;stroke:#6d5b02;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 99.796681,48.798378 c 0,-7.634837 -3.903797,-11.524282 -6.730684,-12.244549"
+       id="path5555" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Face Normal"
+     style="display:none;mix-blend-mode:normal">
+    <circle
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path1014-6"
+       cx="120.63594"
+       cy="102.10207"
+       r="6.5764575" />
+    <circle
+       style="display:inline;mix-blend-mode:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path1014-6-6"
+       cx="77.239616"
+       cy="101.85267"
+       r="6.5764575" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Face Danger"
+     style="display:inline;mix-blend-mode:normal">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 72.93183,101.60479 10.763322,4.26091"
+       id="path930" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 127.00366,101.49845 -10.76333,4.2609"
+       id="path930-3" />
+  </g>
+</svg>

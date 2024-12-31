@@ -5,19 +5,19 @@ import { pop } from "../sfx";
 import * as divider from './divider';
 import { PhysObject } from "./phys-object";
 
-const colors = [
-    'rgb(217, 21, 76)',   // cherry
-    'rgb(248, 69, 69)', // strawberry
-    'rgb(142, 69, 133)',  // grapes
-    'rgb(248, 170, 53)',   // dekopon
-    'rgb(255, 123, 0)',   // orange
-    'rgb(233, 19, 19)',     // apple
-    'rgb(209, 226, 49)',  // pear
-    'rgb(247, 186, 185)', // peach
-    'rgb(227, 205, 57)',  // pineapple
-    'rgb(139, 203, 99)',  // cantaloupe
-    'rgb(13, 115, 45)', // watermelon
-];
+const fruitNames = [
+    'cherry',
+    'strawberry',
+    'grapes',
+    'dekopon',
+    'orange',
+    'apple',
+    'pear',
+    'peach',
+    'pineapple',
+    'cantaloupe',
+    'watermelon',
+]
 
 export class Fruit implements PhysObject {
     static maxFruitType = 10;
@@ -60,11 +60,8 @@ export class Fruit implements PhysObject {
         elem.className = 'circle world-object';
         elem.style.width = `${radiusDisp * 2}cqmin`;
         elem.style.height = `${radiusDisp * 2}cqmin`;
-        const fruitClass = (rng() < 0.5) ? 'fruit-type1' : 'fruit-type2';
-        elem.classList.add('fruit', fruitClass);
-
-        elem.style.backgroundColor = colors[fruitType];
-
+        elem.classList.add('fruit');
+        elem.classList.add(fruitNames[fruitType]);
         return elem;
     }
 

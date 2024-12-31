@@ -51,22 +51,20 @@ p {
     border-radius: 50%;
 }
 
-.fruit-type1 {
-    background-image: url("../img/happy.svg");
+@each $fruit in (cherry, strawberry, grapes, dekopon, orange, apple, pear, peach, pineapple, cantaloupe, watermelon) {
+    .#{$fruit} {
+        transform: scale(200%);
+        background-image: url("../img/#{$fruit}-normal.svg");
+
+        .danger & {
+            background-image: url("../img/#{$fruit}-danger.svg");
+        }
+    }
+}
+
+.fruit {
     background-size: contain;
-}
-
-.fruit-type2 {
-    background-image: url("../img/glee.svg");
-    background-size: contain;
-}
-
-.danger .fruit-type1 {
-    background-image: url("../img/ouch.svg");
-}
-
-.danger .fruit-type2 {
-    background-image: url("../img/shock.svg");
+    background-repeat: no-repeat;
 }
 
 .divider {

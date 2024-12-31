@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" version="1.1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <path d="m102.03 59.727c15.891-15.801 37.418-3.6429 42.855 15.24 9.9292 34.487-9.7946 70.823-37.214 71.478-3.6732 0.0877-5.5229-2.9564-9.1204-2.2408-3.2618 0.64879-5.2714 3.6046-8.5985 3.269-20.988-2.117-43.85-28.879-35.798-67.123 3.6046-17.119 11.345-36.726 47.876-20.624z" fill="#e0210a" stroke="#ab0000" stroke-width="5"/>
+ <path d="m100.47 46.863c-2.623-4.2392-7.4168-6.3108-11.234-7.864-2.2237-0.90338-13.606-0.79376-11.555 4.3332 2.1553 5.3884 17.839 3.5308 22.789 3.5308z" fill="#51cf33" stroke="#10a000" stroke-linejoin="round" stroke-width="3"/>
+ <ellipse cx="102.27" cy="63.09" rx="8.1225" ry="4.9177" fill="#ab0000" fill-opacity=".99597" stop-color="#000000"/>
+ <path d="m102.3 61.651c-1.299-18.835 3.897-24.031 3.897-24.031v0" fill="none" stroke="#965c00" stroke-linecap="round" stroke-width="6"/>
+ <g fill="#000000" style="mix-blend-mode:normal">
+  <circle cx="120.64" cy="102.1" r="6.5765" style="mix-blend-mode:normal"/>
+  <circle cx="77.24" cy="101.85" r="6.5765" style="mix-blend-mode:normal"/>
+ </g>
+ <g display="none" fill="none" stroke="#000000" stroke-linecap="round" stroke-width="8" style="mix-blend-mode:normal">
+  <path d="m72.932 101.6 10.763 4.2609" display="inline" style="mix-blend-mode:normal"/>
+  <path d="m127 101.5-10.763 4.2609" display="inline" style="mix-blend-mode:normal"/>
+ </g>
+</svg>

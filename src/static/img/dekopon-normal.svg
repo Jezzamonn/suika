@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" version="1.1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g>
+  <path d="m100.26 45.402a10.168 8.2763 0 0 0-6.2852 1.7715 10.168 8.2763 0 0 0-2.9375-0.35352 10.168 8.2763 0 0 0-10.168 8.2773 10.168 8.2763 0 0 0 0.60156 2.7988 46 46 0 0 0-27.473 42.104 46 46 0 0 0 46 46 46 46 0 0 0 46-46 46 46 0 0 0-27.828-42.258 10.168 8.2763 0 0 0 0.53515-2.6445 10.168 8.2763 0 0 0-10.168-8.2773 10.168 8.2763 0 0 0-2.2324 0.20313 10.168 8.2763 0 0 0-6.0449-1.6211z" fill="#e09d0a" stop-color="#000000" stroke="#aa6e0f" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/>
+ </g>
+ <g fill="#000000" style="mix-blend-mode:normal">
+  <circle cx="120.64" cy="102.1" r="6.5765"/>
+  <circle cx="77.24" cy="101.85" r="6.5765" style="mix-blend-mode:normal"/>
+ </g>
+ <g display="none" fill="none" stroke="#000000" stroke-linecap="round" stroke-width="8" style="mix-blend-mode:normal">
+  <path d="m72.932 101.6 10.763 4.2609"/>
+  <path d="m127 101.5-10.763 4.2609"/>
+ </g>
+</svg>
