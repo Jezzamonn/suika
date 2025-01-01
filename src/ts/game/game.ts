@@ -13,6 +13,8 @@ export class Game {
     private container: HTMLElement;
     private simulatedTimeMs: number | undefined;
 
+    private planet: Planet;
+
     private unresolvedCollisions: PhysObject[][] = [];
 
     private heldFruit: HeldFruit[] = [];
@@ -20,6 +22,7 @@ export class Game {
 
     private fruitIndexToTouchId: Map<number, number> = new Map();
     gameOver = false;
+    score = 0;
 
     private removeEventListeners: () => void;
 
@@ -34,6 +37,7 @@ export class Game {
 
         // Create planet
         const planet = new Planet(this.world);
+        this.planet = planet;
         this.container.appendChild(planet.elem);
 
         // Create held fruit / next fruit
@@ -283,6 +287,7 @@ export class Game {
 
         this.world.step(dt);
 
+        const startScore = this.score;
         // Resolve collisions
         for (const [objA, objB] of this.unresolvedCollisions) {
             if ('hasTouchedGround' in objA && 'hasTouchedGround' in objB) {
@@ -291,10 +296,14 @@ export class Game {
             }
 
             if (objA instanceof Fruit && objB instanceof Fruit) {
-                Fruit.merge(objA, objB, this.world, this.container);
+                this.score += Fruit.merge(objA, objB, this.world, this.container);
             }
-         }
+        }
         this.unresolvedCollisions = [];
+
+        if (startScore !== this.score) {
+            this.planet.setScore(this.score);
+        }
 
         let maxCountSeen = 0;
         for (let body = this.world.getBodyList(); body; body = body.getNext()) {

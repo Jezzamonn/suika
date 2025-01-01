@@ -17,7 +17,14 @@ const fruitNames = [
     'pineapple',
     'cantaloupe',
     'watermelon',
-]
+];
+
+const scores: number[] = [];
+for (let i = 0; i < fruitNames.length; i++) {
+    const level = i + 1;
+    const prevScore = scores[scores.length - 1] || 0;
+    scores.push(prevScore + level);
+}
 
 export class Fruit implements PhysObject {
     static maxFruitType = 10;
@@ -92,7 +99,7 @@ export class Fruit implements PhysObject {
         }
     }
 
-    static merge(fruitA: Fruit, fruitB: Fruit, world: World, container: HTMLElement) {
+    static merge(fruitA: Fruit, fruitB: Fruit, world: World, container: HTMLElement): number {
         if (fruitA.fruitType === fruitB.fruitType && !fruitA.destroyed && !fruitB.destroyed) {
             const posA = fruitA.body.getPosition();
             const posB = fruitB.body.getPosition();
@@ -112,16 +119,17 @@ export class Fruit implements PhysObject {
 
             pop(newFruitAmt);
 
-            if (newFruitType > Fruit.maxFruitType) {
-                return;
+            if (newFruitType <= Fruit.maxFruitType) {
+                // Create a new fruit at the midpoint
+                const newFruit = new Fruit(world, newFruitType);
+                newFruit.body.setPosition(midPoint);
+                newFruit.body.setLinearVelocity(averageVelocity);
+                container.appendChild(newFruit.elem);
             }
 
-            // Create a new fruit at the midpoint
-            const newFruit = new Fruit(world, newFruitType);
-            newFruit.body.setPosition(midPoint);
-            newFruit.body.setLinearVelocity(averageVelocity);
-            container.appendChild(newFruit.elem);
+            return scores[fruitA.fruitType];
         }
+        return 0;
     }
 }
 

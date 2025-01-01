@@ -7,6 +7,7 @@ export const planetRadiusDisp = 50 / 5;
 export class Planet implements PhysObject {
     body: any;
     elem: HTMLElement;
+    scoreElem: HTMLElement;
     hasTouchedGround = true;
 
     constructor(world: World) {
@@ -24,9 +25,19 @@ export class Planet implements PhysObject {
         this.elem.className = 'planet world-object';
         this.elem.style.width = `${planetRadiusDisp * 2}cqmin`;
         this.elem.style.height = `${planetRadiusDisp * 2}cqmin`;
-        this.elem.style.backgroundColor = 'rgb(28, 28, 64)';
+
+        // Add score element
+        const scoreElem = document.createElement('div');
+        scoreElem.className = 'planet-score';
+        scoreElem.innerText = '0';
+        this.elem.appendChild(scoreElem);
+        this.scoreElem = scoreElem;
 
         this.body.setUserData(this);
+    }
+
+    setScore(score: number) {
+        this.scoreElem.innerText = score.toString();
     }
 }
 
