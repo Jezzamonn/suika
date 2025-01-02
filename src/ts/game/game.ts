@@ -1,4 +1,5 @@
 import { Vec2, World } from 'planck';
+import { v4 as uuidv4 } from 'uuid';
 import { TIME_STEP } from './constants';
 import { makeDividers } from './object/divider';
 import { Fruit, HeldFruit } from './object/fruit';
@@ -12,6 +13,7 @@ export class Game {
     private world: World;
     private container: HTMLElement;
     private simulatedTimeMs: number | undefined;
+    private gameId: string;
 
     private planet: Planet;
 
@@ -29,6 +31,8 @@ export class Game {
     public onResetTriggered = () => {};
 
     constructor(numPlayers: number) {
+        this.gameId = uuidv4();
+
         this.container = document.querySelector('.world')!;
 
         this.world = new World({
@@ -303,6 +307,7 @@ export class Game {
 
         if (startScore !== this.score) {
             this.planet.setScore(this.score);
+            saveScore(this.gameId, this.score);
         }
 
         let maxCountSeen = 0;
@@ -320,5 +325,27 @@ export class Game {
         const worldElem = this.container;
         worldElem.classList.toggle('danger', maxCountSeen > 0.1);
     }
+}
 
+interface Score {
+    gameId: string;
+    score: number;
+    date: string;
+}
+
+function saveScore(gameId: string, score: number) {
+    const newScore: Score = { gameId, score, date: new Date().toJSON() };
+
+    const key = 'suika-planet--scores';
+    const savedScoresStr = localStorage.getItem(key);
+    // Array of { gameId: string, score: number, date: string }, sorted by score descending
+    const savedScores: Score[] = savedScoresStr ? JSON.parse(savedScoresStr) : [];
+    const existingScoreIndex = savedScores.findIndex(s => s.gameId === gameId);
+    if (existingScoreIndex !== -1) {
+        savedScores[existingScoreIndex] = newScore;
+    } else {
+        savedScores.push(newScore);
+        savedScores.sort((a, b) => b.score - a.score);
+    }
+    localStorage.setItem(key, JSON.stringify(savedScores));
 }
