@@ -1,4 +1,4 @@
-const frequency = 1000;
+const frequency = 1500;
 
 class MusicClass {
     audio: HTMLAudioElement;
@@ -18,7 +18,7 @@ class MusicClass {
         this.source.connect(this.audioContext.destination);
 
         this.filter = this.audioContext.createBiquadFilter();
-        this.filter.type = 'lowpass';
+        this.filter.type = 'highpass';
         this.filter.frequency.setValueAtTime(frequency, 0);
     }
 
