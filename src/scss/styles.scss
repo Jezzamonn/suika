@@ -51,6 +51,7 @@ p {
     background-color: #fff;
     z-index: -2;
     border-radius: 50%;
+    border: 0.5vmin solid rgb(196, 196, 219);
 }
 
 .planet {
@@ -109,6 +110,7 @@ p {
     height: 90vh;
     font-size: 3vmin;
     background-color: white;
+    border: 0.5vmin solid rgb(196, 196, 219);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 3vh;
     z-index: 1;
@@ -137,4 +139,6 @@ p {
     margin: 3vmin 0;
     font-size: 3vmin;
     padding: 1vmin 2vmin;
+
+    border: 0.5vmin solid rgb(196, 196, 219);
 }
