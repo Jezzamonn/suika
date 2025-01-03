@@ -26,6 +26,14 @@ class MusicClass {
         this.audio.play();
     }
 
+    toggleMute() {
+        this.setMute(!this.audio.muted);
+    }
+
+    setMute(mute: boolean) {
+        this.audio.muted = mute;
+    }
+
     addLowPassFilter() {
         if (this.filtering) {
             return;

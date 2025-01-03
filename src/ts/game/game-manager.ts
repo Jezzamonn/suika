@@ -21,6 +21,13 @@ export class GameManager {
     start() {
         this.startGame();
         music.start();
+
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'm' || event.key === 'M') {
+                music.toggleMute();
+            }
+        });
     }
 
     private startGame() {
