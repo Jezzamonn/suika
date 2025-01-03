@@ -6,6 +6,7 @@ import { Fruit, HeldFruit } from './object/fruit';
 import { PhysObject } from './object/phys-object';
 import { Planet } from './object/planet';
 import { saveScore } from './score';
+import { sfx } from './sfx';
 
 const maxOutsideBoundsTime = 0.5;
 
@@ -233,6 +234,8 @@ export class Game {
         }
 
         this.render();
+
+        sfx.resetPops();
 
         requestAnimationFrame(() => this.doAnimationLoop());
     }

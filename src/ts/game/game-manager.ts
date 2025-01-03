@@ -1,4 +1,5 @@
 import { Game } from "./game";
+import { music } from "./music";
 import { GameOverPopup } from "./ui/game-over-popup";
 
 export class GameManager {
@@ -17,7 +18,12 @@ export class GameManager {
         this.container = document.querySelector('.content')!;
     }
 
-    startGame() {
+    start() {
+        this.startGame();
+        music.start();
+    }
+
+    private startGame() {
         this.gameOverElem?.remove();
         this.gameOverElem = undefined;
         this.game?.clearAll();
@@ -26,11 +32,15 @@ export class GameManager {
         this.game.start();
 
         this.game.onGameOver = () => this.showScores();
+
+        music.clearLowPassFilter();
     }
 
-    showScores() {
+    private showScores() {
         this.gameOverElem = new GameOverPopup();
         this.gameOverElem.onPlayAgain = () => this.startGame();
         this.container.appendChild(this.gameOverElem.elem);
+
+        music.addLowPassFilter();
     }
 }
