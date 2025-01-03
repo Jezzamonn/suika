@@ -11,7 +11,7 @@ export function makeScoreTable(): HTMLElement {
     const table = document.createElement('table');
     table.classList.add('score-table');
     const thead = document.createElement('thead');
-    thead.innerHTML = `<tr><th>Score</th><th>Date</th></tr>`;
+    thead.innerHTML = `<tr><th>Score</th><th>Date</th><th>Players</th></tr>`;
     table.appendChild(thead);
 
     const tbody = document.createElement('tbody');
@@ -21,9 +21,12 @@ export function makeScoreTable(): HTMLElement {
         scoreCell.textContent = score.score.toString();
         const dateCell = document.createElement('td');
         dateCell.textContent = score.date;
+        const playersCell = document.createElement('td');
+        playersCell.textContent = score.numPlayers?.toString() ?? '';
 
         row.appendChild(scoreCell);
         row.appendChild(dateCell);
+        row.appendChild(playersCell);
         tbody.appendChild(row);
     });
 
