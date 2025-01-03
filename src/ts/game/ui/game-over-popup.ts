@@ -1,6 +1,6 @@
 import { makeScoreTable } from "./score-table";
 
-export class GameOverElem {
+export class GameOverPopup {
 
     onPlayAgain = () => {};
 
@@ -8,7 +8,7 @@ export class GameOverElem {
 
     constructor() {
         this.elem = document.createElement('div');
-        this.elem.classList.add('game-over-elem');
+        this.elem.classList.add('game-over-popup');
 
         const gameOverHeading = document.createElement('h2');
         gameOverHeading.textContent = 'Game Over';
@@ -18,6 +18,7 @@ export class GameOverElem {
         this.elem.appendChild(scoreTable);
 
         const playAgainButton = document.createElement('button');
+        playAgainButton.classList.add('play-again-button');
         playAgainButton.textContent = 'Play Again';
         playAgainButton.addEventListener('click', () => this.onPlayAgain());
         this.elem.appendChild(playAgainButton);

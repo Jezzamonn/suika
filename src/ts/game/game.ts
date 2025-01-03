@@ -31,7 +31,7 @@ export class Game {
 
     public onGameOver = () => {};
 
-    constructor(numPlayers: number) {
+    constructor(readonly numPlayers: number) {
         this.gameId = uuidv4();
 
         this.container = document.querySelector('.world')!;
@@ -301,7 +301,7 @@ export class Game {
 
         if (startScore !== this.score) {
             this.planet.setScore(this.score);
-            saveScore(this.gameId, this.score);
+            saveScore(this.gameId, this.score, this.numPlayers);
         }
 
         let maxCountSeen = 0;

@@ -34,7 +34,7 @@ p {
 .world {
     width: 0;
     height: 0;
-    position: relative;
+    position: absolute;
     width: 80vmin;
     height: 80vmin;
 
@@ -101,4 +101,40 @@ p {
 
 .invisible {
     visibility: hidden;
+}
+
+.game-over-popup {
+    position: absolute;
+    width: min(90vw, 60vh);
+    height: 90vh;
+    font-size: 3vmin;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 3vh;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 3vmin;
+}
+
+.score-table-container {
+    width: 100%;
+    flex: 1;
+    overflow: scroll;
+}
+
+.score-table {
+    width: 100%;
+    text-align: center;
+}
+
+.score-table tbody tr:nth-child(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.play-again-button {
+    margin: 3vmin 0;
+    font-size: 3vmin;
+    padding: 1vmin 2vmin;
 }

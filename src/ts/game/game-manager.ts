@@ -1,16 +1,20 @@
 import { Game } from "./game";
-import { GameOverElem } from "./ui/game-over-elem";
+import { GameOverPopup } from "./ui/game-over-popup";
 
 export class GameManager {
 
     game: Game | undefined;
-    gameOverElem: GameOverElem | undefined;
+    gameOverElem: GameOverPopup | undefined;
+
+    container: HTMLElement;
 
     numFruits: number;
 
     constructor() {
         const urlParams = new URLSearchParams(window.location.search);
         this.numFruits = parseInt(urlParams.get('players') || '2');
+
+        this.container = document.querySelector('.content')!;
     }
 
     startGame() {
@@ -25,8 +29,8 @@ export class GameManager {
     }
 
     showScores() {
-        this.gameOverElem = new GameOverElem();
+        this.gameOverElem = new GameOverPopup();
         this.gameOverElem.onPlayAgain = () => this.startGame();
-        document.body.appendChild(this.gameOverElem.elem);
+        this.container.appendChild(this.gameOverElem.elem);
     }
 }

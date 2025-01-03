@@ -1,11 +1,15 @@
 import { readScores } from "../score";
 
-export function makeScoreTable(): HTMLTableElement {
+export function makeScoreTable(): HTMLElement {
     const scores = readScores();
     // Sort scores by score descending
     scores.sort((a, b) => b.score - a.score);
 
+    const div = document.createElement('div');
+    div.classList.add('score-table-container');
+
     const table = document.createElement('table');
+    table.classList.add('score-table');
     const thead = document.createElement('thead');
     thead.innerHTML = `<tr><th>Score</th><th>Date</th></tr>`;
     table.appendChild(thead);
@@ -25,5 +29,7 @@ export function makeScoreTable(): HTMLTableElement {
 
     table.appendChild(tbody);
 
-    return table;
+    div.appendChild(table);
+
+    return div;
 }

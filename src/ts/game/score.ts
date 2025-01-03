@@ -2,12 +2,13 @@ export interface Score {
     gameId: string;
     score: number;
     date: string;
+    numPlayers: number;
 }
 
 const key = 'suika-planet--scores';
 
-export function saveScore(gameId: string, score: number) {
-    const newScore: Score = { gameId, score, date: new Date().toJSON() };
+export function saveScore(gameId: string, score: number, numPlayers: number) {
+    const newScore: Score = { gameId, score, date: new Date().toJSON(), numPlayers };
 
     const savedScores = readScores();
     const existingScoreIndex = savedScores.findIndex(s => s.gameId === gameId);
