@@ -5,6 +5,7 @@ import { makeDividers } from './object/divider';
 import { Fruit, HeldFruit } from './object/fruit';
 import { PhysObject } from './object/phys-object';
 import { Planet } from './object/planet';
+import { saveScore } from './score';
 
 const maxOutsideBoundsTime = 0.5;
 
@@ -26,9 +27,9 @@ export class Game {
     gameOver = false;
     score = 0;
 
-    private removeEventListeners: () => void;
+    removeEventListeners: () => void;
 
-    public onResetTriggered = () => {};
+    public onGameOver = () => {};
 
     constructor(numPlayers: number) {
         this.gameId = uuidv4();
@@ -148,21 +149,12 @@ export class Game {
             }
         };
 
-        const maybeEndGame = (event: MouseEvent) => {
-            if (this.gameOver) {
-                this.clearAll();
-                this.removeEventListeners();
-                this.onResetTriggered();
-            }
-        }
-
         document.addEventListener('mousedown', onMouseDown);
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('touchstart', onTouchStart, { passive: false });
         document.addEventListener('touchmove', onTouchMove, { passive: false });
         document.addEventListener('touchend', onTouchEnd, { passive: false });
         document.addEventListener('keydown', onKeyDown);
-        planet.elem.addEventListener('click', maybeEndGame);
 
         this.removeEventListeners = () => {
             document.removeEventListener('mousedown', onMouseDown);
@@ -171,7 +163,6 @@ export class Game {
             document.removeEventListener('touchmove', onTouchMove);
             document.removeEventListener('touchend', onTouchEnd);
             document.removeEventListener('keydown', onKeyDown);
-            planet.elem.removeEventListener('click', maybeEndGame);
         };
 
         this.world.on('begin-contact', (contact) => {
@@ -261,6 +252,10 @@ export class Game {
             heldFruit.elem.remove();
         }
         this.heldFruit = [];
+
+        this.removeEventListeners();
+
+        this.onGameOver();
     }
 
     clearAll() {
@@ -272,7 +267,6 @@ export class Game {
             }
             child.remove();
         }
-        this.removeEventListeners();
     }
 
     update(dt: number) {
@@ -327,25 +321,3 @@ export class Game {
     }
 }
 
-interface Score {
-    gameId: string;
-    score: number;
-    date: string;
-}
-
-function saveScore(gameId: string, score: number) {
-    const newScore: Score = { gameId, score, date: new Date().toJSON() };
-
-    const key = 'suika-planet--scores';
-    const savedScoresStr = localStorage.getItem(key);
-    // Array of { gameId: string, score: number, date: string }, sorted by score descending
-    const savedScores: Score[] = savedScoresStr ? JSON.parse(savedScoresStr) : [];
-    const existingScoreIndex = savedScores.findIndex(s => s.gameId === gameId);
-    if (existingScoreIndex !== -1) {
-        savedScores[existingScoreIndex] = newScore;
-    } else {
-        savedScores.push(newScore);
-        savedScores.sort((a, b) => b.score - a.score);
-    }
-    localStorage.setItem(key, JSON.stringify(savedScores));
-}
