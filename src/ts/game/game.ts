@@ -259,6 +259,7 @@ export class Game {
     }
 
     clearAll() {
+        this.removeEventListeners();
         // Remove all items created by this game. Just remove all children of the container.
         const children = [...this.container.children];
         for (const child of children) {
