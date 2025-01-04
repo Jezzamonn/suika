@@ -1,4 +1,8 @@
+import { localStoragePrefix } from "./constants";
+
 const frequency = 1500;
+
+const storageKey = `${localStoragePrefix}musicMuted`;
 
 class MusicClass {
     audio: HTMLAudioElement;
@@ -20,6 +24,8 @@ class MusicClass {
         this.filter = this.audioContext.createBiquadFilter();
         this.filter.type = 'highpass';
         this.filter.frequency.setValueAtTime(frequency, 0);
+
+        this.loadMuteState();
     }
 
     start() {
@@ -32,6 +38,14 @@ class MusicClass {
 
     setMute(mute: boolean) {
         this.audio.muted = mute;
+        localStorage.setItem(storageKey, JSON.stringify(mute));
+    }
+
+    loadMuteState() {
+        const muteState = localStorage.getItem(storageKey);
+        if (muteState !== null) {
+            this.audio.muted = JSON.parse(muteState);
+        }
     }
 
     addLowPassFilter() {
