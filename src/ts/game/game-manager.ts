@@ -22,7 +22,6 @@ export class GameManager {
         this.startGame();
         music.start();
 
-
         document.addEventListener('keydown', (event) => {
             if (event.key === 'm' || event.key === 'M') {
                 music.toggleMute();
@@ -33,9 +32,10 @@ export class GameManager {
     private startGame() {
         this.gameOverElem?.remove();
         this.gameOverElem = undefined;
-        this.game?.clearAll();
+        this.game?.remove();
 
         this.game = new Game(this.numFruits);
+        this.container.append(this.game.elem)
         this.game.start();
 
         this.game.onGameOver = () => this.showScores();
