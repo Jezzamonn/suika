@@ -195,6 +195,9 @@ export class Game {
     dropFruit(index: number) {
         const heldFruit = this.heldFruit[index];
         const fruit = heldFruit.createFruit(this.world);
+        if (this.world.getBodyCount() == 1) {
+            fruit.hasTouchedGround = true;
+        }
 
         this.container.appendChild(fruit.elem);
 

@@ -121,6 +121,7 @@ export class Fruit implements PhysObject {
                 const newFruit = new Fruit(world, newFruitType);
                 newFruit.body.setPosition(midPoint);
                 newFruit.body.setLinearVelocity(averageVelocity);
+                newFruit.hasTouchedGround = fruitA.hasTouchedGround || fruitB.hasTouchedGround;
                 container.appendChild(newFruit.elem);
             }
 
