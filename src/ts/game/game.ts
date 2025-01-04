@@ -17,7 +17,7 @@ export class Game {
     private simulatedTimeMs: number | undefined;
     private gameId: string;
 
-    private planet: Planet;
+    private planet?: Planet;
 
     private unresolvedCollisions: PhysObject[][] = [];
 
@@ -41,10 +41,10 @@ export class Game {
             gravity: new Vec2(0.0, 0.0),
         });
 
-        // Create planet
-        const planet = new Planet(this.world);
-        this.planet = planet;
-        this.container.appendChild(planet.elem);
+        // // Create planet
+        // const planet = new Planet(this.world);
+        // this.planet = planet;
+        // this.container.appendChild(planet.elem);
 
         // Create held fruit / next fruit
         for (let i = 0; i < numPlayers; i++) {
@@ -288,6 +288,10 @@ export class Game {
                 const pos = body.getPosition();
                 const force = pos.clone().neg().mul(body.getMass() * 10); // Gravity force towards the center
                 body.applyForceToCenter(force);
+
+                const velocity = body.getLinearVelocity();
+                const dragForce = velocity.clone().neg().mul(body.getMass()); // Drag force proportional to velocity
+                body.applyForceToCenter(dragForce);
             }
         }
 
@@ -308,7 +312,7 @@ export class Game {
         this.unresolvedCollisions = [];
 
         if (startScore !== this.score) {
-            this.planet.setScore(this.score);
+            this.planet?.setScore(this.score);
             saveScore(this.gameId, this.score, this.numPlayers);
         }
 
