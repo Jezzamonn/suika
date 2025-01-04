@@ -53,11 +53,13 @@ export class Game {
             const angleDelta = (1 / numPlayers) * 2 * Math.PI;
 
             const nextFruit = new HeldFruit(angle, angleDelta / 2);
+            nextFruit.markAsNext();
             this.nextFruit.push(nextFruit);
             this.container.appendChild(nextFruit.elem);
 
             const heldFruit = new HeldFruit(angle, angleDelta / 2);
-            // Hacky
+            heldFruit.markAsHeld();
+            // Hacky -- this adjusts it to a smaller radius.
             heldFruit.setElemPosition(heldFruit.posDisp.x, heldFruit.posDisp.y);
             this.heldFruit.push(heldFruit);
             this.container.appendChild(heldFruit.elem);
@@ -201,11 +203,13 @@ export class Game {
         // Move next fruit into held fruit position
         const nextFruit = this.nextFruit[index];
         nextFruit.setElemPosition(heldFruit.posDisp.x, heldFruit.posDisp.y);
+        nextFruit.markAsHeld();
         this.container.appendChild(nextFruit.elem);
         this.heldFruit[index] = nextFruit;
 
         // Create new next fruit
         const newFruit = new HeldFruit(heldFruit.middleAngle, heldFruit.halfAngleDelta);
+        newFruit.markAsNext();
         this.container.appendChild(newFruit.elem);
         this.nextFruit[index] = newFruit;
     }

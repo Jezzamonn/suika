@@ -83,6 +83,10 @@ p {
 .fruit {
     background-size: contain;
     background-repeat: no-repeat;
+
+    &.next {
+        opacity: 0.5;
+    }
 }
 
 .divider {

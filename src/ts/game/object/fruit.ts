@@ -161,6 +161,16 @@ export class HeldFruit {
         this.updateElemPosition();
     }
 
+    markAsNext() {
+        this.elem.classList.add('next');
+        this.elem.classList.remove('held');
+    }
+
+    markAsHeld() {
+        this.elem.classList.add('held');
+        this.elem.classList.remove('next');
+    }
+
     isInRange(x: number, y: number) {
         let angle = Math.atan2(y, x);
         let angleDiff = (angle - this.middleAngle) % (2 * Math.PI);
