@@ -139,13 +139,39 @@ p {
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-.play-again-button {
-    margin: 3vmin 0;
+button {
     font-size: 3vmin;
-    padding: 1vmin 2vmin;
+    padding: 0.5em 1em;
 
-    border: 0.5vmin solid rgb(187, 23, 56);
-    background-color: rgb(233, 37, 77);
+    border: 0.5vmin solid black;
     border-radius: 1vmin;
     color: white;
+}
+
+.play-again-button {
+    margin: 3vmin 0;
+    border-color: rgb(187, 23, 56);
+    background-color: rgb(233, 37, 77);
+}
+
+.select-players-ui {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.select-players-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.select-players-button {
+    margin: 1vmin;
+    font-size: 7vmin;
+    min-width: 100px;
+
+    border-color: rgb(187, 23, 56);
+    background-color: rgb(231, 128, 167);
+    border-radius: 2vmin;
 }

@@ -10,3 +10,5 @@ export const rng = seededRandom('seed');
 
 export const maxFruitType = 10;
 export const maxSpawnType = 5;
+
+export const localStoragePrefix = 'suika-planet--';
