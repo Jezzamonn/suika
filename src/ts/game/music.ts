@@ -6,7 +6,7 @@ const storageKey = `${localStoragePrefix}musicMuted`;
 
 class MusicClass {
     audio: HTMLAudioElement;
-    audioContext: AudioContext;
+    audioContext: AudioContext | undefined;
     source: MediaElementAudioSourceNode;
     filter: BiquadFilterNode;
 
@@ -17,19 +17,21 @@ class MusicClass {
         this.audio.volume = 0.5;
         this.audio.loop = true;
 
-        this.audioContext = new AudioContext();
-        this.source = this.audioContext.createMediaElementSource(this.audio);
-        this.source.connect(this.audioContext.destination);
-
-        this.filter = this.audioContext.createBiquadFilter();
-        this.filter.type = 'highpass';
-        this.filter.frequency.setValueAtTime(frequency, 0);
-
         this.loadMuteState();
     }
 
-    start() {
-        this.audio.play();
+    playIfNotPlaying() {
+        if (this.audio.paused) {
+            this.audio.play();
+
+            this.audioContext = new AudioContext();
+            this.source = this.audioContext.createMediaElementSource(this.audio);
+            this.source.connect(this.audioContext.destination);
+
+            this.filter = this.audioContext.createBiquadFilter();
+            this.filter.type = 'highpass';
+            this.filter.frequency.setValueAtTime(frequency, 0);
+        }
     }
 
     toggleMute() {
@@ -49,7 +51,7 @@ class MusicClass {
     }
 
     addLowPassFilter() {
-        if (this.filtering) {
+        if (this.filtering || !this.audioContext) {
             return;
         }
         this.source.disconnect(this.audioContext.destination);
@@ -59,7 +61,7 @@ class MusicClass {
     }
 
     clearLowPassFilter() {
-        if (!this.filtering) {
+        if (!this.filtering || !this.audioContext) {
             return;
         }
         this.source.disconnect(this.filter);

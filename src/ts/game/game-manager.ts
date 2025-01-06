@@ -19,7 +19,6 @@ export class GameManager {
 
     start() {
         this.showSelectPlayers();
-        music.start();
 
         document.addEventListener('keydown', (event) => {
             if (event.key === 'm' || event.key === 'M') {
@@ -47,6 +46,7 @@ export class GameManager {
 
         this.game.onGameOver = () => this.showScores();
 
+        music.playIfNotPlaying();
         music.clearLowPassFilter();
     }
 
