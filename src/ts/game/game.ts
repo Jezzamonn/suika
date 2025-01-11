@@ -271,7 +271,8 @@ export class Game {
 
         this.removeEventListeners();
 
-        await Promise.race([wait(2), waitForClick()]);
+        await wait(1)
+        await Promise.race([wait(4), waitForClick()]);
 
         this.onGameOver();
     }
@@ -333,7 +334,7 @@ export class Game {
         for (let body = this.world.getBodyList(); body; body = body.getNext()) {
             if (body.getUserData() instanceof Fruit) {
                 const fruit = body.getUserData() as Fruit;
-                fruit.updateIsOutsideBoundsCount(dt);
+                fruit.updateIsOutsideBoundsCount(dt, maxOutsideBoundsTime);
                 maxCountSeen = Math.max(maxCountSeen, fruit.isOutsideBoundsCount);
             }
         }

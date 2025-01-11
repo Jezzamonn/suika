@@ -91,6 +91,19 @@ p {
     }
 }
 
+@keyframes scale-animation {
+    0%, 100% {
+        transform: scale(200%);
+    }
+    50% {
+        transform: scale(300%);
+    }
+}
+
+.fruit-dead {
+    animation: scale-animation 1s infinite;
+}
+
 .divider {
     position: absolute;
     z-index: -3;

@@ -31,6 +31,7 @@ export class Fruit implements PhysObject {
     elem: HTMLElement;
     destroyed = false;
     hasTouchedGround = false;
+    dead = false;
 
     isOutsideBoundsCount = 0;
 
@@ -83,6 +84,7 @@ export class Fruit implements PhysObject {
 
         // Also set the outside class
         this.elem.classList.toggle('outside', this.hasTouchedGround && this.isOutsideBounds());
+        this.elem.classList.toggle('fruit-dead', this.dead);
     }
 
     isOutsideBounds() {
@@ -91,11 +93,15 @@ export class Fruit implements PhysObject {
         return posLen > (50 * 0.9) * DISPLAY_TO_M;
     }
 
-    updateIsOutsideBoundsCount(dt: number) {
+    updateIsOutsideBoundsCount(dt: number, max: number) {
         if (this.hasTouchedGround && this.isOutsideBounds()) {
             this.isOutsideBoundsCount += dt;
         } else {
             this.isOutsideBoundsCount = 0;
+        }
+
+        if (this.isOutsideBoundsCount > max) {
+            this.dead = true;
         }
     }
 
