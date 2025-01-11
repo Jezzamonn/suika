@@ -2,7 +2,6 @@ import { Circle, Vec2, World } from "planck";
 import { clamp, experp } from "../../lib/util";
 import { DISPLAY_TO_M, maxFruitType, maxSpawnType, rng } from "../constants";
 import { sfx } from "../sfx";
-import * as divider from './divider';
 import { PhysObject } from "./phys-object";
 
 const fruitNames = [
@@ -142,18 +141,15 @@ export class HeldFruit {
     rotation = 0;
 
     halfAngleDeltaAfterPadding: number;
-    halfAngleDeltaAfterDivider: number;
 
     constructor(public middleAngle: number, public halfAngleDelta: number) {
         this.fruitType = Math.floor(rng() * (maxSpawnType + 1));
         this.elem = Fruit.createElem(this.fruitType);
         this.elem.classList.add('held-fruit');
 
-        this.halfAngleDeltaAfterDivider = this.halfAngleDelta - divider.halfArcSize;
-
         const radiusDisp = Fruit.getRadiusDisp(this.fruitType);
         const radiusAngle = radiusDisp / holdRadiusDisp;
-        this.halfAngleDeltaAfterPadding = this.halfAngleDeltaAfterDivider - radiusAngle;
+        this.halfAngleDeltaAfterPadding = this.halfAngleDelta - radiusAngle;
 
         this.posDisp = new Vec2(
             Math.cos(this.middleAngle) * nextRadiusDisp,
@@ -182,7 +178,7 @@ export class HeldFruit {
             angleDiff -= 2 * Math.PI;
         }
 
-        return Math.abs(angleDiff) < this.halfAngleDeltaAfterDivider;
+        return Math.abs(angleDiff) < this.halfAngleDelta;
     }
 
     get radiusDisp() {

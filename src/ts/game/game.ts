@@ -2,7 +2,7 @@ import { Vec2, World } from 'planck';
 import { v4 as uuidv4 } from 'uuid';
 import { wait } from '../lib/util';
 import { TIME_STEP } from './constants';
-import { makeDividers } from './object/divider';
+import { dividerArcSize, makeDividers } from './object/divider';
 import { Fruit, HeldFruit } from './object/fruit';
 import { PhysObject } from './object/phys-object';
 import { Planet } from './object/planet';
@@ -57,7 +57,10 @@ export class Game {
         for (let i = 0; i < numPlayers; i++) {
             const iAmt = i / numPlayers;
             const angle = iAmt * 2 * Math.PI + 0.5 * Math.PI;
-            const angleDelta = (1 / numPlayers) * 2 * Math.PI;
+            let angleDelta = (1 / numPlayers) * 2 * Math.PI - dividerArcSize;
+            if (numPlayers == 1) {
+                angleDelta = 2 * Math.PI + 1; // extra +1 to avoid any floating point weirdness.
+            }
 
             const nextFruit = new HeldFruit(angle, angleDelta / 2);
             nextFruit.markAsNext();
@@ -72,7 +75,7 @@ export class Game {
             this.elem.appendChild(heldFruit.elem);
         }
 
-        // Create dividers too
+        // Create dividers toox
         for (const divider of makeDividers(numPlayers)) {
             this.elem.appendChild(divider);
         }

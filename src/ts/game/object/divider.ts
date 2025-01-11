@@ -1,6 +1,10 @@
 export const halfArcSize = 1.5 / 50;
+export const dividerArcSize = 2 * halfArcSize;
 
 export function makeDividers(numPlayers: number): SVGElement[] {
+    if (numPlayers == 1) {
+        return [];
+    }
     const dividers: SVGElement[] = []
     for (let i = 0; i < numPlayers; i++) {
         const iAmt = (i + 0.5) / numPlayers;
