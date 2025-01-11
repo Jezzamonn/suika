@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 html, body {
     margin: 0;
     overflow: hidden;
@@ -110,7 +112,7 @@ p {
 
 .game-over-popup {
     position: absolute;
-    width: min(90vw, 60vh);
+    width: min(90vw, 70vh);
     height: 90vh;
     font-size: 3vmin;
     background-color: white;
@@ -124,6 +126,12 @@ p {
     padding: 0 3vmin;
 }
 
+.button-row {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
 .score-table-container {
     width: 100%;
     flex: 1;
@@ -133,6 +141,8 @@ p {
 .score-table {
     width: 100%;
     text-align: center;
+    font-weight: 200;
+    color: #444;
 }
 
 .score-table tbody tr:nth-child(odd) {
@@ -141,15 +151,15 @@ p {
 
 button {
     font-size: 3vmin;
-    padding: 0.5em 1em;
+    padding: 0.5em 0.7em;
 
     border: 0.5vmin solid black;
     border-radius: 1vmin;
     color: white;
 }
 
-.play-again-button {
-    margin: 3vmin 0;
+.game-over-button {
+    margin: 3vmin 0.5vmin;
     border-color: rgb(187, 23, 56);
     background-color: rgb(233, 37, 77);
 }
@@ -161,6 +171,11 @@ button {
     align-items: center;
 }
 
+.select-players-heading {
+    font-size: 5vmin;
+    margin: 1vmin;
+}
+
 .select-players-buttons {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -170,8 +185,26 @@ button {
     margin: 1vmin;
     font-size: 7vmin;
     min-width: 100px;
+    padding: 0.5em 1.5em;
 
-    border-color: rgb(187, 23, 56);
-    background-color: rgb(231, 128, 167);
     border-radius: 2vmin;
+
+    @each $index, $color in (
+        1: rgb(217, 21, 76),   // cherry
+        2: rgb(248, 69, 69),   // strawberry
+        3: rgb(142, 69, 133),  // grapes
+        4: rgb(248, 170, 53),  // dekopon
+        5: rgb(255, 123, 0),   // orange
+        6: rgb(233, 19, 19),   // apple
+        7: rgb(199, 216, 51),  // pear
+        8: rgb(247, 186, 185), // peach
+        9: rgb(227, 205, 57),  // pineapple
+        10: rgb(139, 203, 99), // cantaloupe
+        11: rgb(13, 115, 45)   // watermelon
+    ) {
+        &:nth-child(#{$index}) {
+            background-color: #{$color};
+            border-color: color.scale($color, $lightness: -30%);
+        }
+    }
 }

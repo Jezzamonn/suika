@@ -61,6 +61,15 @@ export class GameManager {
 
             this.startGame();
         }
+        this.gameOverElem.onAdjustPlayers = () => {
+            this.gameOverElem?.remove();
+            this.gameOverElem = undefined;
+
+            this.game?.remove();
+            this.game = undefined;
+
+            this.showSelectPlayers();
+        }
         this.container.appendChild(this.gameOverElem.elem);
 
         music.addLowPassFilter();

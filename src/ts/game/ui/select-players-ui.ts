@@ -10,7 +10,8 @@ export class SelectPlayersUI {
         this.elem.classList.add('select-players-ui');
 
         const heading = document.createElement('h2');
-        heading.textContent = 'Select Players';
+        heading.classList.add('select-players-heading');
+        heading.textContent = 'Choose the number of players';
         this.elem.appendChild(heading);
 
         const maxPlayers = 8;
