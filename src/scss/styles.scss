@@ -76,7 +76,7 @@ p {
         transform: scale(200%);
         background-image: url("../img/#{$fruit}-normal.svg");
 
-        .danger & {
+        .danger &, &.outside {
             background-image: url("../img/#{$fruit}-danger.svg");
         }
     }

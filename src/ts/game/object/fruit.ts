@@ -80,6 +80,9 @@ export class Fruit implements PhysObject {
         this.elem.style.left = `${xDisp - this.radiusDisp + 50}cqmin`;
         this.elem.style.top = `${yDisp - this.radiusDisp + 50}cqmin`;
         this.elem.style.rotate = `${this.body.getAngle()}rad`;
+
+        // Also set the outside class
+        this.elem.classList.toggle('outside', this.hasTouchedGround && this.isOutsideBounds());
     }
 
     isOutsideBounds() {

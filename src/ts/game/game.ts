@@ -335,14 +335,15 @@ export class Game {
                 const fruit = body.getUserData() as Fruit;
                 fruit.updateIsOutsideBoundsCount(dt);
                 maxCountSeen = Math.max(maxCountSeen, fruit.isOutsideBoundsCount);
-                if (fruit.isOutsideBoundsCount > maxOutsideBoundsTime) {
-                    this.endGame();
-                }
             }
         }
 
+        if (maxCountSeen > maxOutsideBoundsTime) {
+            this.endGame();
+        }
+
         const worldElem = this.elem;
-        worldElem.classList.toggle('danger', maxCountSeen > 0.1);
+        worldElem.classList.toggle('danger', maxCountSeen > maxOutsideBoundsTime * 0.5);
     }
 }
 
