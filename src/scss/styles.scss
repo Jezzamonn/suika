@@ -71,13 +71,17 @@ p {
     font-size: 3vmin;
 }
 
-@each $fruit in (cherry, strawberry, grapes, dekopon, orange, apple, pear, peach, pineapple, cantaloupe, watermelon) {
+@each $fruit in (cherry, strawberry, grapes, dekopon, "orange", apple, pear, peach, pineapple, cantaloupe, watermelon) {
     .#{$fruit} {
         transform: scale(200%);
         background-image: url("../img/#{$fruit}-normal.svg");
 
         .danger &, &.outside {
             background-image: url("../img/#{$fruit}-danger.svg");
+        }
+
+        .blink &, &.blink {
+            background-image: url("../img/#{$fruit}-blink.svg");
         }
     }
 }
