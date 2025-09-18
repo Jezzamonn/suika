@@ -1,22 +1,25 @@
 import { Vec2, World } from 'planck';
 import { v4 as uuidv4 } from 'uuid';
+import { wait } from '../lib/util';
 import { TIME_STEP } from './constants';
 import { makeDividers } from './object/divider';
 import { Fruit, HeldFruit } from './object/fruit';
 import { PhysObject } from './object/phys-object';
 import { Planet } from './object/planet';
 import { saveScore } from './score';
+import { sfx } from './sfx';
+import { waitForClick } from './wait-for-click';
 
 const maxOutsideBoundsTime = 0.5;
 
 export class Game {
 
     private world: World;
-    private container: HTMLElement;
+    elem: HTMLElement;
     private simulatedTimeMs: number | undefined;
     private gameId: string;
 
-    private planet: Planet;
+    private planet?: Planet;
 
     private unresolvedCollisions: PhysObject[][] = [];
 
@@ -34,7 +37,12 @@ export class Game {
     constructor(readonly numPlayers: number) {
         this.gameId = uuidv4();
 
-        this.container = document.querySelector('.world')!;
+        this.elem = document.createElement('div');
+        this.elem.classList.add('world');
+
+        const bgWorld = document.createElement('div');
+        bgWorld.classList.add('world-bg', 'dont-remove');
+        this.elem.append(bgWorld);
 
         this.world = new World({
             gravity: new Vec2(0.0, 0.0),
@@ -43,7 +51,7 @@ export class Game {
         // Create planet
         const planet = new Planet(this.world);
         this.planet = planet;
-        this.container.appendChild(planet.elem);
+        this.elem.appendChild(planet.elem);
 
         // Create held fruit / next fruit
         for (let i = 0; i < numPlayers; i++) {
@@ -52,19 +60,21 @@ export class Game {
             const angleDelta = (1 / numPlayers) * 2 * Math.PI;
 
             const nextFruit = new HeldFruit(angle, angleDelta / 2);
+            nextFruit.markAsNext();
             this.nextFruit.push(nextFruit);
-            this.container.appendChild(nextFruit.elem);
+            this.elem.appendChild(nextFruit.elem);
 
             const heldFruit = new HeldFruit(angle, angleDelta / 2);
-            // Hacky
+            heldFruit.markAsHeld();
+            // Hacky -- this adjusts it to a smaller radius.
             heldFruit.setElemPosition(heldFruit.posDisp.x, heldFruit.posDisp.y);
             this.heldFruit.push(heldFruit);
-            this.container.appendChild(heldFruit.elem);
+            this.elem.appendChild(heldFruit.elem);
         }
 
         // Create dividers too
         for (const divider of makeDividers(numPlayers)) {
-            this.container.appendChild(divider);
+            this.elem.appendChild(divider);
         }
 
         // Update all the positions
@@ -174,7 +184,7 @@ export class Game {
     }
 
     isInHeldItemRange(index: number, clientX: number, clientY: number) {
-        const rect = this.container.getBoundingClientRect();
+        const rect = this.elem.getBoundingClientRect();
         const x = clientX - (rect.left + rect.width / 2);
         const y = clientY - (rect.top + rect.height / 2);
 
@@ -182,7 +192,7 @@ export class Game {
     }
 
     updateHeldItemPosition(index: number, clientX: number, clientY: number) {
-        const rect = this.container.getBoundingClientRect();
+        const rect = this.elem.getBoundingClientRect();
         const x = clientX - (rect.left + rect.width / 2);
         const y = clientY - (rect.top + rect.height / 2);
 
@@ -192,20 +202,25 @@ export class Game {
     dropFruit(index: number) {
         const heldFruit = this.heldFruit[index];
         const fruit = heldFruit.createFruit(this.world);
+        if (this.world.getBodyCount() == 1) {
+            fruit.hasTouchedGround = true;
+        }
 
-        this.container.appendChild(fruit.elem);
+        this.elem.appendChild(fruit.elem);
 
         heldFruit.elem.remove();
 
         // Move next fruit into held fruit position
         const nextFruit = this.nextFruit[index];
         nextFruit.setElemPosition(heldFruit.posDisp.x, heldFruit.posDisp.y);
-        this.container.appendChild(nextFruit.elem);
+        nextFruit.markAsHeld();
+        this.elem.appendChild(nextFruit.elem);
         this.heldFruit[index] = nextFruit;
 
         // Create new next fruit
         const newFruit = new HeldFruit(heldFruit.middleAngle, heldFruit.halfAngleDelta);
-        this.container.appendChild(newFruit.elem);
+        newFruit.markAsNext();
+        this.elem.appendChild(newFruit.elem);
         this.nextFruit[index] = newFruit;
     }
 
@@ -234,6 +249,8 @@ export class Game {
 
         this.render();
 
+        sfx.resetPops();
+
         requestAnimationFrame(() => this.doAnimationLoop());
     }
 
@@ -244,29 +261,30 @@ export class Game {
         }
     }
 
-    endGame() {
+    async endGame() {
         this.gameOver = true;
 
-        // Remove all held items.
-        for (const heldFruit of this.heldFruit) {
-            heldFruit.elem.remove();
-        }
-        this.heldFruit = [];
+        this.removeHeldFruit();
 
         this.removeEventListeners();
+
+        await Promise.race([wait(2), waitForClick()]);
 
         this.onGameOver();
     }
 
-    clearAll() {
-        // Remove all items created by this game. Just remove all children of the container.
-        const children = [...this.container.children];
-        for (const child of children) {
-            if (child.classList.contains('dont-remove')) {
-                continue;
-            }
-            child.remove();
+    removeHeldFruit() {
+        for (const fruit of this.heldFruit) {
+            fruit.elem.remove();
         }
+        for (const fruit of this.nextFruit) {
+            fruit.elem.remove();
+        }
+    }
+
+    remove() {
+        this.removeEventListeners();
+        this.elem.remove();
     }
 
     update(dt: number) {
@@ -280,6 +298,10 @@ export class Game {
                 const pos = body.getPosition();
                 const force = pos.clone().neg().mul(body.getMass() * 10); // Gravity force towards the center
                 body.applyForceToCenter(force);
+
+                const velocity = body.getLinearVelocity();
+                const dragForce = velocity.clone().neg().mul(body.getMass()); // Drag force proportional to velocity
+                body.applyForceToCenter(dragForce);
             }
         }
 
@@ -294,13 +316,13 @@ export class Game {
             }
 
             if (objA instanceof Fruit && objB instanceof Fruit) {
-                this.score += Fruit.merge(objA, objB, this.world, this.container);
+                this.score += Fruit.merge(objA, objB, this.world, this.elem);
             }
         }
         this.unresolvedCollisions = [];
 
         if (startScore !== this.score) {
-            this.planet.setScore(this.score);
+            this.planet?.setScore(this.score);
             saveScore(this.gameId, this.score, this.numPlayers);
         }
 
@@ -316,7 +338,7 @@ export class Game {
             }
         }
 
-        const worldElem = this.container;
+        const worldElem = this.elem;
         worldElem.classList.toggle('danger', maxCountSeen > 0.1);
     }
 }

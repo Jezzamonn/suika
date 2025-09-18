@@ -20,7 +20,15 @@ export function makeScoreTable(): HTMLElement {
         const scoreCell = document.createElement('td');
         scoreCell.textContent = score.score.toString();
         const dateCell = document.createElement('td');
-        dateCell.textContent = score.date;
+
+        const date = new Date(score.date);
+        dateCell.textContent = date.toLocaleString(undefined, {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+        })
         const playersCell = document.createElement('td');
         playersCell.textContent = score.numPlayers?.toString() ?? '';
 

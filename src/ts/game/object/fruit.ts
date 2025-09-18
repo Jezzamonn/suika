@@ -1,7 +1,7 @@
 import { Circle, Vec2, World } from "planck";
 import { clamp, experp } from "../../lib/util";
-import { DISPLAY_TO_M, rng } from "../constants";
-import { pop } from "../sfx";
+import { DISPLAY_TO_M, maxFruitType, maxSpawnType, rng } from "../constants";
+import { sfx } from "../sfx";
 import * as divider from './divider';
 import { PhysObject } from "./phys-object";
 
@@ -27,8 +27,6 @@ for (let i = 0; i < fruitNames.length; i++) {
 }
 
 export class Fruit implements PhysObject {
-    static maxFruitType = 10;
-    static maxSpawnType = 5;
 
     body: any;
     elem: HTMLElement;
@@ -56,7 +54,7 @@ export class Fruit implements PhysObject {
     }
 
     static getRadiusDisp(fruitType: number): number {
-        const amt = fruitType / Fruit.maxFruitType;
+        const amt = fruitType / maxFruitType;
         return experp(1.2, 10, amt) * 1.3;
     }
 
@@ -114,16 +112,16 @@ export class Fruit implements PhysObject {
             fruitA.destroyed = true;
             fruitB.destroyed = true;
 
+            sfx.pop(fruitA.fruitType);
+
             const newFruitType = fruitA.fruitType + 1;
-            const newFruitAmt = newFruitType / Fruit.maxFruitType;
 
-            pop(newFruitAmt);
-
-            if (newFruitType <= Fruit.maxFruitType) {
+            if (newFruitType <= maxFruitType) {
                 // Create a new fruit at the midpoint
                 const newFruit = new Fruit(world, newFruitType);
                 newFruit.body.setPosition(midPoint);
                 newFruit.body.setLinearVelocity(averageVelocity);
+                newFruit.hasTouchedGround = fruitA.hasTouchedGround || fruitB.hasTouchedGround;
                 container.appendChild(newFruit.elem);
             }
 
@@ -147,7 +145,7 @@ export class HeldFruit {
     halfAngleDeltaAfterDivider: number;
 
     constructor(public middleAngle: number, public halfAngleDelta: number) {
-        this.fruitType = Math.floor(rng() * (Fruit.maxSpawnType + 1));
+        this.fruitType = Math.floor(rng() * (maxSpawnType + 1));
         this.elem = Fruit.createElem(this.fruitType);
         this.elem.classList.add('held-fruit');
 
@@ -162,6 +160,16 @@ export class HeldFruit {
             Math.sin(this.middleAngle) * nextRadiusDisp,
         );
         this.updateElemPosition();
+    }
+
+    markAsNext() {
+        this.elem.classList.add('next');
+        this.elem.classList.remove('held');
+    }
+
+    markAsHeld() {
+        this.elem.classList.add('held');
+        this.elem.classList.remove('next');
     }
 
     isInRange(x: number, y: number) {

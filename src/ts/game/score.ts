@@ -1,3 +1,5 @@
+import { localStoragePrefix } from "./constants";
+
 export interface Score {
     gameId: string;
     score: number;
@@ -5,7 +7,7 @@ export interface Score {
     numPlayers: number;
 }
 
-const key = 'suika-planet--scores';
+const key = `${localStoragePrefix}scores`;
 
 export function saveScore(gameId: string, score: number, numPlayers: number) {
     const newScore: Score = { gameId, score, date: new Date().toJSON(), numPlayers };
