@@ -1,21 +1,69 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="200"
    height="200"
    viewBox="0 0 200 200"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0.2 (e86c8708, 2021-01-15)"
-   sodipodi:docname="apple.svg">
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   sodipodi:docname="apple.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
-     id="defs2" />
+     id="defs2">
+    <linearGradient
+       id="linearGradient2"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#f85d4a;stop-opacity:1;"
+         offset="0.2147436"
+         id="stop1" />
+      <stop
+         style="stop-color:#e0210a;stop-opacity:1;"
+         offset="0.94871801"
+         id="stop2" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient6"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#f85d4a;stop-opacity:1;"
+         offset="0.2147436"
+         id="stop5" />
+      <stop
+         style="stop-color:#e0210a;stop-opacity:1;"
+         offset="0.94551283"
+         id="stop6" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2"
+       id="radialGradient3-3"
+       cx="19.607058"
+       cy="94.951035"
+       fx="19.607058"
+       fy="94.951035"
+       r="16.963409"
+       gradientTransform="matrix(0.76623376,0,0,0.36124172,109.34265,77.572627)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6"
+       id="radialGradient3-3-9"
+       cx="19.607058"
+       cy="94.951035"
+       fx="19.607058"
+       fy="94.951035"
+       r="16.963409"
+       gradientTransform="matrix(0.76623376,0,0,0.36124172,60.879199,77.572645)"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -23,11 +71,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.989637"
-     inkscape:cx="77.029122"
-     inkscape:cy="106.62787"
+     inkscape:zoom="1.6593506"
+     inkscape:cx="124.44627"
+     inkscape:cy="54.238086"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      inkscape:document-rotation="0"
      showgrid="false"
      units="px"
@@ -36,26 +84,32 @@
      inkscape:window-width="1440"
      inkscape:window-height="781"
      inkscape:window-x="0"
-     inkscape:window-y="26"
+     inkscape:window-y="25"
      inkscape:window-maximized="0"
      showguides="true"
-     inkscape:guide-bbox="true">
+     inkscape:guide-bbox="true"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1">
     <sodipodi:guide
        position="-71.23249,150.2182"
        orientation="0,-1"
-       id="guide1056" />
+       id="guide1056"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="5.6662208,50.249879"
        orientation="0,-1"
-       id="guide1058" />
+       id="guide1058"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="50.186527,174.09728"
        orientation="1,0"
-       id="guide1060" />
+       id="guide1060"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="150.15485,150.2182"
        orientation="1,0"
-       id="guide1062" />
+       id="guide1062"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -65,7 +119,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -104,25 +158,67 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Face Normal"
-     style="display:none;mix-blend-mode:normal">
-    <circle
-       style="display:inline;mix-blend-mode:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="path1014-6"
-       cx="120.63594"
-       cy="102.10207"
-       r="6.5764575" />
-    <circle
-       style="display:inline;mix-blend-mode:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="path1014-6-6"
-       cx="77.239616"
-       cy="101.85267"
-       r="6.5764575" />
+     style="display:inline;mix-blend-mode:normal">
+    <ellipse
+       style="display:inline;mix-blend-mode:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.10751;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="path1014-6-9"
+       cx="77.325127"
+       cy="100.45445"
+       rx="6.5117044"
+       ry="7.9643378" />
+    <ellipse
+       style="display:inline;mix-blend-mode:normal;fill:#ffffff;stroke-width:0.509069"
+       id="path2-3"
+       cx="81.006355"
+       cy="95.407478"
+       rx="1.8636885"
+       ry="1.1946623" />
+    <ellipse
+       style="display:inline;mix-blend-mode:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.10751;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="path1014-6-9-0"
+       cx="120.70618"
+       cy="100.45493"
+       rx="6.5117044"
+       ry="7.9643378" />
+    <ellipse
+       style="display:inline;mix-blend-mode:normal;fill:#ffffff;stroke-width:0.509069"
+       id="path2-3-0"
+       cx="124.56293"
+       cy="95.444923"
+       rx="1.8636885"
+       ry="1.1946623" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#f66453;stroke-width:10.103;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:2.8;stroke-dasharray:none;stroke-dashoffset:2.9174;stroke-opacity:1"
+       d="m 123.05462,63.630212 c 17.95362,19.142697 11.94119,31.978502 11.94119,31.978502"
+       id="path1" />
+    <ellipse
+       style="display:inline;mix-blend-mode:normal;fill:url(#radialGradient3-3);stroke:none;stroke-width:6.69302;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:2.8;stroke-dasharray:none;stroke-dashoffset:2.9174;stroke-opacity:1"
+       id="path2-8"
+       cx="124.36624"
+       cy="111.87289"
+       rx="12.997937"
+       ry="6.1278911" />
+    <ellipse
+       style="display:inline;mix-blend-mode:normal;fill:url(#radialGradient3-3-9);stroke:none;stroke-width:6.69302;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:2.8;stroke-dasharray:none;stroke-dashoffset:2.9174;stroke-opacity:1"
+       id="path2-8-5"
+       cx="75.902786"
+       cy="111.87289"
+       rx="12.997937"
+       ry="6.1278911" />
+    <path
+       style="fill:#f9bdb6;fill-opacity:1;stroke:none;stroke-width:6.8;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:2.8;stroke-dasharray:none;stroke-dashoffset:2.9174;stroke-opacity:1"
+       d="m 18.415064,91.274664 c 0,0 -10.808842,-0.200164 0,0 z"
+       id="path6" />
+    <path
+       style="fill:#fba89e;stroke:none;stroke-width:16.9319;stroke-miterlimit:2.8;stroke-dashoffset:2.9174;fill-opacity:1"
+       d="m 94.127244,111.88105 c 7.198236,12.67459 11.780716,0.006 11.780716,0.006"
+       id="path2" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Face Danger"
-     style="display:inline;mix-blend-mode:normal">
+     style="display:none;mix-blend-mode:normal">
     <path
        style="display:inline;mix-blend-mode:normal;fill:none;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 72.93183,101.60479 10.763322,4.26091"
